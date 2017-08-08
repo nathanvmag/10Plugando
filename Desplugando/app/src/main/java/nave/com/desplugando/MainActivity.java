@@ -22,7 +22,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements Runnable{
         Handler h ;
     TextView fb,wpp,insta,twitter;
-    Button usobt;
+    Button usobt,voltar;
     RelativeLayout inicial,uso;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +53,14 @@ public class MainActivity extends AppCompatActivity implements Runnable{
             public void onClick(View v) {
                 inicial.setVisibility(View.INVISIBLE);
                 uso.setVisibility(View.VISIBLE);
+            }
+        });
+        voltar = (Button)findViewById(R.id.voltarBt);
+        voltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                inicial.setVisibility(View.VISIBLE);
+                uso.setVisibility(View.INVISIBLE);
             }
         });
         super.onStart();

@@ -67,6 +67,7 @@ public class ViciService extends Service  {
     {
         super.onCreate();
         SharedPreferences sp = getSharedPreferences("prefs", Activity.MODE_PRIVATE);
+        NotifyHour=sp.getInt("hora",14);
         whatsapp = sp.getInt("whatsapp",0);
         facebook= sp.getInt("facebook",0);
         twitter = sp.getInt("twitter",0);
@@ -81,7 +82,7 @@ public class ViciService extends Service  {
         scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
             public void run() {
                  task();
-                debug("1 segundoooo");
+
             }
         }, 0, 1, TimeUnit.SECONDS);
 
@@ -121,8 +122,15 @@ public class ViciService extends Service  {
         debug("1 seg");
         if (calendar.get(Calendar.HOUR_OF_DAY) == NotifyHour)
         {
-            if (NotifyHour==14)NotifyHour=21;
-            else if (NotifyHour==21)NotifyHour=14;
+            if (NotifyHour==14){
+                NotifyHour=21;
+                editor.putInt("hora",NotifyHour);
+            }
+
+            else if (NotifyHour==21) {
+            NotifyHour = 14;
+                editor.putInt("hora",NotifyHour);
+        }
             Notify(R.drawable.r,"Veja o uso nas redes","Veja quanto tempo já foi gasto nas redes",0,MainActivity.class);
         }
         if (calendar.get(Calendar.DAY_OF_MONTH)!=day&&calendar.get(Calendar.HOUR_OF_DAY)==resetHour)
@@ -161,6 +169,13 @@ public class ViciService extends Service  {
                 // debug(ap.getPackageName() + "  "+ ap.foreground);
                 instagram+=5;
             }
+             int[] temp = new int[]{facebook,whatsapp,twitter,instagram};
+            String[]temptx = new String[]{"facebook","whatsapp","twitter","instagram"};
+            for (int i = 0;i<temp.length;i++){
+            if (temp[i]==7200)
+            {
+                Notify(R.drawable.r,"Voce está usando o "+temptx[i]+" demais","Você ja passou 2 horas usando",1,MainActivity.class);
+            }
 
         }
 
@@ -169,6 +184,7 @@ public class ViciService extends Service  {
         editor.putInt("facebook",facebook);
         editor.putInt("instagram",instagram);
         editor.commit();
+    }
     }
 
 
