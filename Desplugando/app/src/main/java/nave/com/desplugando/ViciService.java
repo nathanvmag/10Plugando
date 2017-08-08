@@ -29,8 +29,14 @@ import com.jaredrummler.android.processes.AndroidProcesses;
 import com.jaredrummler.android.processes.models.AndroidAppProcess;
 
 import java.security.acl.NotOwnerException;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static android.R.id.list;
 
@@ -39,11 +45,16 @@ import static android.R.id.list;
  * Created by henrique.filho on 19/06/2017.
  */
 
-public class ViciService extends Service implements Runnable  {
+public class ViciService extends Service  {
     boolean active = true;
     public int whatsapp,facebook,instagram,twitter;
 
     Handler h ;
+    Timer t ;
+    Calendar calendar;
+    int day;
+    int NotifyHour = 14;
+    int resetHour=0;
     private final LocalBinder connection = new LocalBinder();
 
     @Override
@@ -62,10 +73,21 @@ public class ViciService extends Service implements Runnable  {
         instagram= sp.getInt("instagram",0);
         debug("Criou o servico");
         active = true;
-        h= new Handler();
-        h.post(this);
+        calendar = Calendar.getInstance();
+        day = (int)calendar.get(Calendar.DAY_OF_MONTH);
+
+        ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(5);
+
+        scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
+            public void run() {
+                 task();
+                debug("1 segundoooo");
+            }
+        }, 0, 1, TimeUnit.SECONDS);
+
 
     }
+
 
     //This class returns to Activity the service reference.
     //With this reference is possible to get the Counter value and show to user.
@@ -92,40 +114,52 @@ public class ViciService extends Service implements Runnable  {
 
 
     }
-
-
-    @Override
-    public void run() {
+    void task()
+    {
         SharedPreferences sp = getSharedPreferences("prefs", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
-
-      /*  List<ActivityManager.RunningAppProcessInfo> processes = AndroidProcesses.getRunningAppProcessInfo(getBaseContext());
-        debug(processes.get(0).processName);
-        for (ActivityManager.RunningAppProcessInfo am :processes
-             ) {
-
-           // debug(am.processName);
-
+        debug("1 seg");
+        if (calendar.get(Calendar.HOUR_OF_DAY) == NotifyHour)
+        {
+            if (NotifyHour==14)NotifyHour=21;
+            else if (NotifyHour==21)NotifyHour=14;
+            Notify(R.drawable.r,"Veja o uso nas redes","Veja quanto tempo já foi gasto nas redes",0,MainActivity.class);
         }
-*/
+        if (calendar.get(Calendar.DAY_OF_MONTH)!=day&&calendar.get(Calendar.HOUR_OF_DAY)==resetHour)
+        {
+            day = calendar.get(Calendar.DAY_OF_MONTH);
+            Notify(R.drawable.r,"As estatisticas serão resetadas","Veja quanto tempo já foi gasto nas redes sociais",0,MainActivity.class);
+            Timer t = new Timer();
+            t.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    whatsapp=0;
+                    facebook=0;
+                    twitter=0;
+                    instagram=0;
+                    Notify(R.drawable.r,"As estatisticas Foram resetadas","Veja quanto tempo já foi gasto nas redes sociais",0,MainActivity.class);
+                }
+            },1800000);
+        }
+
         List<AndroidAppProcess> processes = AndroidProcesses.getRunningAppProcesses();
         for(AndroidAppProcess ap : processes)
         {
             if (ap.getPackageName().equals("com.facebook.katana")&& ap.foreground&&ap.name.equals("com.facebook.katana")){
-            // debug(ap.getPackageName() + "  "+ ap.foreground);
-            facebook++;
-        }
+                // debug(ap.getPackageName() + "  "+ ap.foreground);
+                facebook+=5;
+            }
             if (ap.getPackageName().equals("com.whatsapp")&& ap.foreground&&ap.name.equals("com.whatsapp")){
                 // debug(ap.getPackageName() + "  "+ ap.foreground);
-                whatsapp++;
+                whatsapp+=5;
             }
             if (ap.getPackageName().equals("com.twitter.android")&& ap.foreground&&ap.name.equals("com.twitter.android")){
                 // debug(ap.getPackageName() + "  "+ ap.foreground);
-                twitter++;
+                twitter+=5;
             }
             if (ap.getPackageName().equals("com.instagram.android")&& ap.foreground&&ap.name.equals("com.instagram.android")){
                 // debug(ap.getPackageName() + "  "+ ap.foreground);
-                instagram++;
+                instagram+=5;
             }
 
         }
@@ -135,8 +169,9 @@ public class ViciService extends Service implements Runnable  {
         editor.putInt("facebook",facebook);
         editor.putInt("instagram",instagram);
         editor.commit();
-        h.postDelayed(this,1000);
     }
+
+
 
     private void SetInterval()
     {

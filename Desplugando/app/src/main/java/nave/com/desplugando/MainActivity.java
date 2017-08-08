@@ -9,6 +9,9 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jaredrummler.android.processes.AndroidProcesses;
@@ -19,6 +22,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements Runnable{
         Handler h ;
     TextView fb,wpp,insta,twitter;
+    Button usobt;
+    RelativeLayout inicial,uso;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,21 +42,51 @@ public class MainActivity extends AppCompatActivity implements Runnable{
         fb= (TextView)findViewById(R.id.fb);
         wpp= (TextView)findViewById(R.id.wpp);
         insta =(TextView)findViewById(R.id.insta);
-        twitter= (TextView)findViewById(R.id.twitter);
+        twitter= (TextView)findViewById(R.id.tt);
+        inicial =(RelativeLayout)findViewById(R.id.InicialLayout);
+        uso = (RelativeLayout)findViewById(R.id.UsoLayout);
+        usobt= (Button)findViewById(R.id.usoBt);
+        inicial.setVisibility(View.VISIBLE);
+        uso.setVisibility(View.INVISIBLE);
+        usobt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                inicial.setVisibility(View.INVISIBLE);
+                uso.setVisibility(View.VISIBLE);
+            }
+        });
         super.onStart();
+    }
+    String CriadordeHorario(int segundos)
+    {
+        int minutos=0,horas=0,segundos2 =0;
+        if (segundos>=60)
+        {
+            minutos = segundos/60;
+            segundos2= segundos%60;
+            if (minutos>=60)
+            {
+                horas= minutos/60;
+                minutos= minutos%60;
+            }
+        }
+        else segundos2=segundos;
+
+        return  horas+"h "+minutos+"min "+segundos2+"seg ";
     }
 
     @Override
     public void run() {
         SharedPreferences sp = getSharedPreferences("prefs", Activity.MODE_PRIVATE);
-        String fbb = "Facebook TIme "+ String.valueOf(sp.getInt("facebook",0));
+
         if (fb!=null) {
+            String fbb = CriadordeHorario(sp.getInt("facebook",0));
             fb.setText(fbb);
-            String wppp = "Whatsapp Time " + sp.getInt("whatsapp", 0);
+            String wppp = CriadordeHorario(sp.getInt("whatsapp",0));
             wpp.setText(wppp);
-            String instaa = "Instagram Time " + sp.getInt("instagram", 0);
+            String instaa = CriadordeHorario(sp.getInt("instagram",0));
             insta.setText(instaa);
-            String twiiter = "Twitter Time " + sp.getInt("twitter", 0);
+            String twiiter = CriadordeHorario(sp.getInt("twitter",0));
             twitter.setText(twiiter);
         }
 
