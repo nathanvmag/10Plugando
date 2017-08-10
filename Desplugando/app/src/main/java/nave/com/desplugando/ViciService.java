@@ -31,6 +31,7 @@ import com.jaredrummler.android.processes.models.AndroidAppProcess;
 import java.security.acl.NotOwnerException;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -45,7 +46,7 @@ import static android.R.id.list;
  * Created by henrique.filho on 19/06/2017.
  */
 
-public class ViciService extends Service  {
+public class ViciService extends Service implements Runnable  {
     boolean active = true;
     public int whatsapp,facebook,instagram,twitter;
 
@@ -55,11 +56,14 @@ public class ViciService extends Service  {
     int day;
     int NotifyHour = 14;
     int resetHour=0;
+    public  List <apptocheck> AppsList;
+    long uptadatetime;
     private final LocalBinder connection = new LocalBinder();
 
     @Override
     public IBinder onBind(Intent intent) {
-        return connection;
+
+            return connection;
     }
 
     @Override
@@ -76,17 +80,15 @@ public class ViciService extends Service  {
         active = true;
         calendar = Calendar.getInstance();
         day = (int)calendar.get(Calendar.DAY_OF_MONTH);
+        uptadatetime= calendar.getTime().getTime();
+        h= new Handler();
+        h.post(this);
+    }
 
-        ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(5);
-
-        scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
-            public void run() {
-                 task();
-
-            }
-        }, 0, 1, TimeUnit.SECONDS);
-
-
+    @Override
+    public void run() {
+        task();
+        h.postDelayed(this,1000);
     }
 
 
@@ -100,8 +102,6 @@ public class ViciService extends Service  {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
     {
-        //Toast.makeText(this,"SERVICE SAMPLE onCreate()",Toast.LENGTH_SHORT).show();
-
 
         return START_STICKY;
     }
@@ -117,9 +117,10 @@ public class ViciService extends Service  {
     }
     void task()
     {
+        Date now = calendar.getTime();
         SharedPreferences sp = getSharedPreferences("prefs", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
-        debug("1 seg");
+        long passtime = now.getTime()- uptadatetime;
         if (calendar.get(Calendar.HOUR_OF_DAY) == NotifyHour)
         {
             if (NotifyHour==14){
@@ -151,23 +152,23 @@ public class ViciService extends Service  {
         }
 
         List<AndroidAppProcess> processes = AndroidProcesses.getRunningAppProcesses();
+
         for(AndroidAppProcess ap : processes)
         {
-            if (ap.getPackageName().equals("com.facebook.katana")&& ap.foreground&&ap.name.equals("com.facebook.katana")){
-                // debug(ap.getPackageName() + "  "+ ap.foreground);
-                facebook+=5;
-            }
-            if (ap.getPackageName().equals("com.whatsapp")&& ap.foreground&&ap.name.equals("com.whatsapp")){
-                // debug(ap.getPackageName() + "  "+ ap.foreground);
-                whatsapp+=5;
-            }
-            if (ap.getPackageName().equals("com.twitter.android")&& ap.foreground&&ap.name.equals("com.twitter.android")){
-                // debug(ap.getPackageName() + "  "+ ap.foreground);
-                twitter+=5;
-            }
-            if (ap.getPackageName().equals("com.instagram.android")&& ap.foreground&&ap.name.equals("com.instagram.android")){
-                // debug(ap.getPackageName() + "  "+ ap.foreground);
-                instagram+=5;
+            if (AppsList!=null)
+            {
+                for(int i=0;i<AppsList.size();i++)
+                {
+                    if (AppsList.get(i)!=null)
+                    {
+
+                        if (ap.getPackageName().equals(AppsList.get(i).packagename)&& ap.foreground&&ap.name.equals(AppsList.get(i).packagename)){
+                            AppsList.get(i).useTime++;
+                            debug("Ta usando o "+AppsList.get(i).packagename+ " " + AppsList.get(i).useTime);
+
+                        }
+                    }
+                }
             }
              int[] temp = new int[]{facebook,whatsapp,twitter,instagram};
             String[]temptx = new String[]{"facebook","whatsapp","twitter","instagram"};
@@ -179,12 +180,18 @@ public class ViciService extends Service  {
 
         }
 
+    }
+    uptadatetime= calendar.getTime().getTime();
+
+
+
+        // debug(whatsapp+" "+twitter+" "+ instagram+" "+facebook);
         editor.putInt("whatsapp",whatsapp);
         editor.putInt("twitter",twitter);
         editor.putInt("facebook",facebook);
         editor.putInt("instagram",instagram);
+        //editor.putInt("apps",)
         editor.commit();
-    }
     }
 
 

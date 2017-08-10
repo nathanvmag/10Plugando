@@ -40,155 +40,28 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/UsoLayout"
+        android:layout_width="450dp"
+        android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="11dp">
+        android:layout_alignParentStart="true">
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true">
+            android:layout_height="match_parent">
 
             <LinearLayout
-                android:orientation="vertical"
+                android:id="@+id/ll"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="456dp">
-
-                    <TextView
-                        android:text="5h 30min 25seg"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/wpp"
-                        android:layout_marginRight="233dp"
-                        tools:visibility="visible"
-                        android:textSize="18sp"
-                        android:layout_marginBottom="10dp"
-                        android:layout_alignBottom="@+id/imageView4"
-                        android:layout_alignStart="@+id/tt" />
-
-                    <TextView
-                        android:text="TWITTER"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/textView2"
-                        android:textSize="24sp"
-                        android:layout_alignTop="@+id/imageView"
-                        android:layout_alignStart="@+id/textView" />
-
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        app:srcCompat="@drawable/twitter"
-                        android:id="@+id/imageView"
-                        android:layout_below="@+id/imageView2"
-                        android:layout_alignStart="@+id/twitter"
-                        android:layout_marginTop="47dp" />
-
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        app:srcCompat="@drawable/wpp"
-                        android:id="@+id/imageView4"
-                        android:layout_marginTop="45dp"
-                        android:layout_below="@+id/imageView"
-                        android:layout_alignEnd="@+id/twitter" />
-
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        app:srcCompat="@drawable/insta"
-                        android:id="@+id/imageView3"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignStart="@+id/imageView4"
-                        android:layout_marginBottom="24dp" />
-
-                    <TextView
-                        android:text="WHATSAPP"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/textView5"
-                        android:textSize="24sp"
-                        android:layout_alignTop="@+id/imageView4"
-                        android:layout_alignStart="@+id/textView2" />
-
-                    <TextView
-                        android:text="5h 30min 25seg"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/insta"
-                        android:layout_marginRight="233dp"
-                        tools:visibility="visible"
-                        android:textSize="18sp"
-                        android:layout_marginBottom="13dp"
-                        android:layout_alignBottom="@+id/imageView3"
-                        android:layout_alignStart="@+id/wpp" />
-
-                    <TextView
-                        android:text="5h 30min 25seg"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/fb"
-                        android:layout_marginRight="233dp"
-                        tools:visibility="visible"
-                        android:textSize="18sp"
-                        android:layout_marginBottom="13dp"
-                        android:layout_above="@+id/imageView"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginEnd="20dp" />
-
-                    <TextView
-                        android:text="5h 30min 25seg"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/tt"
-                        android:layout_marginRight="233dp"
-                        tools:visibility="visible"
-                        android:textSize="18sp"
-                        android:layout_marginBottom="13dp"
-                        android:layout_above="@+id/imageView4"
-                        android:layout_alignStart="@+id/fb" />
-
-                    <TextView
-                        android:text="FACEBOOK"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/textView"
-                        android:textSize="24sp"
-                        android:layout_alignTop="@+id/imageView2"
-                        android:layout_centerHorizontal="true" />
-
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        app:srcCompat="@drawable/fb"
-                        android:id="@+id/imageView2"
-                        android:layout_alignTop="@+id/textView4"
-                        android:layout_alignParentStart="true" />
-
-                    <TextView
-                        android:text="INSTAGRAM"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/textView3"
-                        android:textSize="24sp"
-                        android:layout_alignTop="@+id/imageView3"
-                        android:layout_alignStart="@+id/textView5" />
-
-                </RelativeLayout>
 
                 <Button
-                    android:text="Voltar"
+                    android:id="@+id/voltarBt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/voltarBt" />
+                    android:text="Voltar" />
 
             </LinearLayout>
         </ScrollView>
