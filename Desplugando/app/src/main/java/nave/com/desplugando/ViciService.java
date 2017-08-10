@@ -12,12 +12,14 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Debug;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
@@ -25,21 +27,38 @@ import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.Toast;
 
+
+
 import com.jaredrummler.android.processes.AndroidProcesses;
 import com.jaredrummler.android.processes.models.AndroidAppProcess;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.lang.reflect.Type;
 import java.security.acl.NotOwnerException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import static android.R.id.list;
+import org.json.*;
+
+
 
 
 /**
@@ -48,8 +67,6 @@ import static android.R.id.list;
 
 public class ViciService extends Service implements Runnable  {
     boolean active = true;
-    public int whatsapp,facebook,instagram,twitter;
-
     Handler h ;
     Timer t ;
     Calendar calendar;
@@ -58,7 +75,10 @@ public class ViciService extends Service implements Runnable  {
     int resetHour=0;
     public  List <apptocheck> AppsList;
     long uptadatetime;
+    String serialized ;
     private final LocalBinder connection = new LocalBinder();
+
+    // ... do something ...
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -72,10 +92,6 @@ public class ViciService extends Service implements Runnable  {
         super.onCreate();
         SharedPreferences sp = getSharedPreferences("prefs", Activity.MODE_PRIVATE);
         NotifyHour=sp.getInt("hora",14);
-        whatsapp = sp.getInt("whatsapp",0);
-        facebook= sp.getInt("facebook",0);
-        twitter = sp.getInt("twitter",0);
-        instagram= sp.getInt("instagram",0);
         debug("Criou o servico");
         active = true;
         calendar = Calendar.getInstance();
@@ -87,7 +103,8 @@ public class ViciService extends Service implements Runnable  {
 
     @Override
     public void run() {
-        task();
+
+         task();
         h.postDelayed(this,1000);
     }
 
@@ -115,11 +132,30 @@ public class ViciService extends Service implements Runnable  {
 
 
     }
-    void task()
-    {
-        Date now = calendar.getTime();
+    void task()  {
+        long estimatedTime = System.currentTimeMillis() - uptadatetime;
+        uptadatetime=  System.currentTimeMillis();
         SharedPreferences sp = getSharedPreferences("prefs", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
+        if (AppsList==null)
+        {
+            List<apptocheck> tempora= new ArrayList<>();
+            serialized= sp.getString("apps",null);
+            if (serialized!=null)
+            {
+                debug("Ira Deserializar o "+serialized);
+            String[] classes = serialized.split("!");
+            for (int i=0;i<classes.length;i++)
+            {
+                String[]a = classes[i].split("°");
+                    tempora.add( new apptocheck(a[0], Integer.parseInt(a[1]),a[2]));
+                }
+            AppsList= tempora;
+                   }
+        }
+
+        Date now = calendar.getTime();
+
         long passtime = now.getTime()- uptadatetime;
         if (calendar.get(Calendar.HOUR_OF_DAY) == NotifyHour)
         {
@@ -142,10 +178,12 @@ public class ViciService extends Service implements Runnable  {
             t.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    whatsapp=0;
-                    facebook=0;
-                    twitter=0;
-                    instagram=0;
+                    for (apptocheck aps:AppsList
+                         ) {aps.twohournot= false;
+                        aps.useTime=0;
+
+                    }
+
                     Notify(R.drawable.r,"As estatisticas Foram resetadas","Veja quanto tempo já foi gasto nas redes sociais",0,MainActivity.class);
                 }
             },1800000);
@@ -163,38 +201,59 @@ public class ViciService extends Service implements Runnable  {
                     {
 
                         if (ap.getPackageName().equals(AppsList.get(i).packagename)&& ap.foreground&&ap.name.equals(AppsList.get(i).packagename)){
-                            AppsList.get(i).useTime++;
+                            AppsList.get(i).useTime+= estimatedTime/1000;
                             debug("Ta usando o "+AppsList.get(i).packagename+ " " + AppsList.get(i).useTime);
 
                         }
                     }
                 }
             }
-             int[] temp = new int[]{facebook,whatsapp,twitter,instagram};
-            String[]temptx = new String[]{"facebook","whatsapp","twitter","instagram"};
-            for (int i = 0;i<temp.length;i++){
-            if (temp[i]==7200)
-            {
-                Notify(R.drawable.r,"Voce está usando o "+temptx[i]+" demais","Você ja passou 2 horas usando",1,MainActivity.class);
+            if (AppsList!=null){
+            for (apptocheck aps:AppsList
+                    ) {
+                if (aps.useTime > 7200 && !aps.twohournot) {
+                    final PackageManager pm = getApplicationContext().getPackageManager();
+                    ApplicationInfo ai;
+                    try {
+                        ai = pm.getApplicationInfo(aps.packagename, 0);
+                    } catch (final PackageManager.NameNotFoundException e) {
+                        ai = null;
+                    }
+                    final String applicationName = (String) (ai != null ? pm.getApplicationLabel(ai) : "(unknown)");
+                    Notify(R.drawable.r, "Voce está usando o " + applicationName + " demais", "Você ja passou 2 horas usando", 1, MainActivity.class);
+                    aps.twohournot = true;
+                }
             }
 
+            }
         }
-
-    }
-    uptadatetime= calendar.getTime().getTime();
-
-
-
         // debug(whatsapp+" "+twitter+" "+ instagram+" "+facebook);
-        editor.putInt("whatsapp",whatsapp);
-        editor.putInt("twitter",twitter);
-        editor.putInt("facebook",facebook);
-        editor.putInt("instagram",instagram);
-        //editor.putInt("apps",)
+
+       if (AppsList!=null) {
+               String serializable= null;
+               for (apptocheck ap:AppsList
+                    ) {
+                   serializable+=ap.getTxt()+"!";
+               }
+           serializable= serializable.replace("null","");
+           //debug(serializable);
+          editor.putString("apps", serializable);
+       }
         editor.commit();
     }
 
-
+    File CreaterPath(String pathhh)
+    {   File path;
+        path =  Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+        if (!path.exists())path.mkdirs();
+        File file = new File(    path,  pathhh);
+        if (!file.exists()) try {
+            file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file;
+    }
 
     private void SetInterval()
     {

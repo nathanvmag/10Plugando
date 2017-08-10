@@ -31,6 +31,7 @@ import com.jaredrummler.android.processes.models.AndroidAppProcess;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class MainActivity extends AppCompatActivity implements Runnable,ServiceConnection
 {
     ViciService mService;
@@ -40,10 +41,11 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
     LinearLayout ll ;
     Handler h ;
     TextView fb,wpp,insta,twitter;
-    Button usobt,voltar;
+    Button usobt,voltar,selectapp;
     RelativeLayout inicial,uso,modelo;
     List <apptocheck> AppsList;
     boolean  done;
+
     String[] InitialApps = new String[] {"com.facebook.katana","com.whatsapp","com.twitter.android","com.instagram.android"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,21 +73,48 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                 }
-                AppsList.add(new apptocheck(InitialApps[i],0,icon));
-                addnewRelative(ll,icon,InitialApps[i]);
+                AppsList.add(new apptocheck(InitialApps[i],0,"false"));
+                addnewRelative(ll,icon,InitialApps[i],0);
             }
         }
-
-        if (mBound)
-        {   mService.AppsList= AppsList;
-            debug("manda p la ");
-        }
-        }else
-        {
+            if (mBound)
+            {   mService.AppsList= AppsList;
+                debug("manda p la ");
+            }
 
         }
+        else {
+            String serialized;
+            List<apptocheck> tempora= new ArrayList<>();
+            serialized= sp.getString("apps",null);
+            if (serialized!=null)
+            {
+                debug("Ira Deserializar o "+serialized);
+                String[] classes = serialized.split("!");
+                for (int i=0;i<classes.length;i++)
+                {
+                    String[]a = classes[i].split("°");
+                    tempora.add( new apptocheck(a[0], Integer.parseInt(a[1]),a[2]));
+                }
+                AppsList= tempora;
+                for(int i=0;i<AppsList.size();i++)
+                {
+                    Drawable icon =null ;
+                    try {
+                     icon = getPackageManager().getApplicationIcon(AppsList.get(i).packagename);
+                    } catch (PackageManager.NameNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    addnewRelative(ll,icon,AppsList.get(i).packagename,AppsList.get(i).useTime);
+                }
+            }
 
-    }
+        }
+
+
+        }
+
+
     void debug(String s)
     {
         Log.d("vicio", s);
@@ -99,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
         insta =(TextView)findViewById(R.id.insta);
         twitter= (TextView)findViewById(R.id.tt);*/
 
-
+        selectapp= (Button)findViewById(R.id.MonitorarApp);
         inicial =(RelativeLayout)findViewById(R.id.InicialLayout);
         uso = (RelativeLayout)findViewById(R.id.UsoLayout);
         usobt= (Button)findViewById(R.id.usoBt);
@@ -120,8 +149,35 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
                 uso.setVisibility(View.INVISIBLE);
             }
         });
+        selectapp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent appIntent;
 
+                appIntent=new Intent(view.getContext(),Chooser.class);
+                startActivityForResult(appIntent, 1);
+            }
+        });
         super.onStart();
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(null!=data){
+
+            if(requestCode==1){
+                //Do something
+                String message=data.getStringExtra("MESSAGE_package_name");
+                debug("O PACKGAE E "+message);
+                inicial.setVisibility(View.INVISIBLE);
+                uso.setVisibility(View.VISIBLE);
+                debug("VEIO AQUIIIi");
+
+            }
+        }
     }
     String CriadordeHorario(int segundos)
     {
@@ -140,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
 
         return  horas+"h "+minutos+"min "+segundos2+"seg ";
     }
-    void addnewRelative(LinearLayout tolayout,Drawable resID,String pkgname)
+    void addnewRelative(LinearLayout tolayout,Drawable resID,String pkgname,int value)
     {
 
         RelativeLayout temp = (RelativeLayout)LayoutInflater.from(this).inflate(R.layout.tey,null);
@@ -152,6 +208,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
                        )
                    (
                                (TextView) temp.getChildAt(i)).setText(pkgname);
+                else ( (TextView) temp.getChildAt(i)).setText(CriadordeHorario(value));
 
             }
             else if (temp.getChildAt(i) instanceof ImageView)

@@ -58,6 +58,12 @@
 
 
                 <Button
+                    android:text="Monitorar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/MonitorarApp" />
+
+                <Button
                     android:id="@+id/voltarBt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
