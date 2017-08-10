@@ -19,11 +19,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jaredrummler.android.processes.AndroidProcesses;
 import com.jaredrummler.android.processes.models.AndroidAppProcess;
@@ -41,9 +45,11 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
     LinearLayout ll ;
     Handler h ;
     TextView fb,wpp,insta,twitter;
-    Button usobt,voltar,selectapp;
+    Button usobt,voltar,selectapp,removebt;
     RelativeLayout inicial,uso,modelo;
     List <apptocheck> AppsList;
+    String PackToADD= null;
+
     boolean  done;
 
     String[] InitialApps = new String[] {"com.facebook.katana","com.whatsapp","com.twitter.android","com.instagram.android"};
@@ -123,10 +129,8 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
     @Override
     protected void onStart() {
 
-      /*  fb= (TextView)findViewById(R.id.fb);
-        wpp= (TextView)findViewById(R.id.wpp);
-        insta =(TextView)findViewById(R.id.insta);
-        twitter= (TextView)findViewById(R.id.tt);*/
+
+        removebt= (Button)findViewById(R.id.Remove);
 
         selectapp= (Button)findViewById(R.id.MonitorarApp);
         inicial =(RelativeLayout)findViewById(R.id.InicialLayout);
@@ -158,7 +162,33 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
                 startActivityForResult(appIntent, 1);
             }
         });
+        removebt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+
+            }
+        });
+
+        if (PackToADD!=null)
+        {
+
+            inicial.setVisibility(View.INVISIBLE);
+            uso.setVisibility(View.VISIBLE);
+
+        }
+
         super.onStart();
+    }
+    boolean checkIfisMonitoring(String s,List<apptocheck> list)
+
+    {
+        for (apptocheck ap:list
+             ) {if (ap.packagename.equals( s))
+            return true;
+        }
+        return false;
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -171,10 +201,8 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
             if(requestCode==1){
                 //Do something
                 String message=data.getStringExtra("MESSAGE_package_name");
-                debug("O PACKGAE E "+message);
-                inicial.setVisibility(View.INVISIBLE);
-                uso.setVisibility(View.VISIBLE);
-                debug("VEIO AQUIIIi");
+
+               PackToADD= message;
 
             }
         }
@@ -216,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
                 ((ImageView) temp.getChildAt(i)).setImageDrawable(resID);
             }
         }
-        tolayout.addView(temp,tolayout.getChildCount()-1);
+        tolayout.addView(temp,tolayout.getChildCount()-3);
 
     }
     public boolean isPackageExisted(String targetPackage){
@@ -231,7 +259,25 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
 
     @Override
     public void run() {
+        if (mBound&&PackToADD!=null)
+        {
 
+
+            if (!checkIfisMonitoring(PackToADD,mService.AppsList)){
+                Drawable icon = null;
+                try {
+                    icon = getPackageManager().getApplicationIcon(PackToADD);
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+                mService.AppsList.add(new apptocheck(PackToADD,0,"false"));
+                addnewRelative(ll,icon,PackToADD,0);
+                PackToADD= null;
+            }else {
+                Toast.makeText(this,"Você já monitora esse App",Toast.LENGTH_LONG).show();
+                PackToADD= null;
+            }
+        }
         if (mBound&&!done)
         {
             mService.AppsList= AppsList;
@@ -239,6 +285,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
         }
         if (mBound)
         {
+
             WriteValues(ll, mService.AppsList);
         }
         h.postDelayed(this,1000);

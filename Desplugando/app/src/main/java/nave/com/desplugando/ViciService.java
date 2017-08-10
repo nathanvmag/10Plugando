@@ -135,6 +135,7 @@ public class ViciService extends Service implements Runnable  {
     void task()  {
         long estimatedTime = System.currentTimeMillis() - uptadatetime;
         uptadatetime=  System.currentTimeMillis();
+        if (!AndroidProcesses.isMyProcessInTheForeground()){
         SharedPreferences sp = getSharedPreferences("prefs", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         if (AppsList==null)
@@ -227,7 +228,6 @@ public class ViciService extends Service implements Runnable  {
 
             }
         }
-        // debug(whatsapp+" "+twitter+" "+ instagram+" "+facebook);
 
        if (AppsList!=null) {
                String serializable= null;
@@ -240,6 +240,7 @@ public class ViciService extends Service implements Runnable  {
           editor.putString("apps", serializable);
        }
         editor.commit();
+    }
     }
 
     File CreaterPath(String pathhh)
