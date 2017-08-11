@@ -2,61 +2,37 @@ package nave.com.desplugando;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.AppOpsManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.os.Binder;
-import android.os.Build;
-import android.os.Debug;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
-import android.widget.Toast;
-
-
-
-import com.jaredrummler.android.processes.AndroidProcesses;
-import com.jaredrummler.android.processes.models.AndroidAppProcess;
-
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.lang.reflect.Type;
-import java.security.acl.NotOwnerException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
+import java.util.SortedMap;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
-import org.json.*;
+import java.util.TreeMap;
 
 
 
@@ -132,10 +108,37 @@ public class ViciService extends Service implements Runnable  {
 
 
     }
+    private String printForegroundTask() {
+        String currentApp = "NULL";
+        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            UsageStatsManager usm = (UsageStatsManager)this.getSystemService("usagestats");
+            long time = System.currentTimeMillis();
+            List<UsageStats> appList = usm.queryUsageStats(UsageStatsManager.INTERVAL_DAILY,  time - 1000*1000, time);
+            if (appList != null && appList.size() > 0) {
+                SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>();
+                for (UsageStats usageStats : appList) {
+                    mySortedMap.put(usageStats.getLastTimeUsed(), usageStats);
+                }
+                if (mySortedMap != null && !mySortedMap.isEmpty()) {
+                    currentApp = mySortedMap.get(mySortedMap.lastKey()).getPackageName();
+                }
+            }
+        } else {
+            ActivityManager am = (ActivityManager)this.getSystemService(Context.ACTIVITY_SERVICE);
+            List<ActivityManager.RunningAppProcessInfo> tasks = am.getRunningAppProcesses();
+            currentApp = tasks.get(0).processName;
+        }
+
+        Log.e("adapter", "Current App in foreground is: " + currentApp);
+        return currentApp;
+    }
+
     void task()  {
+
+
         long estimatedTime = System.currentTimeMillis() - uptadatetime;
         uptadatetime=  System.currentTimeMillis();
-        if (!AndroidProcesses.isMyProcessInTheForeground()){
+
         SharedPreferences sp = getSharedPreferences("prefs", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         if (AppsList==null)
@@ -190,43 +193,37 @@ public class ViciService extends Service implements Runnable  {
             },1800000);
         }
 
-        List<AndroidAppProcess> processes = AndroidProcesses.getRunningAppProcesses();
-
-        for(AndroidAppProcess ap : processes)
+      if (AppsList!=null){
+        for(int i=0;i<AppsList.size();i++)
         {
-            if (AppsList!=null)
+            if (AppsList.get(i)!=null)
             {
-                for(int i=0;i<AppsList.size();i++)
-                {
-                    if (AppsList.get(i)!=null)
-                    {
 
-                        if (ap.getPackageName().equals(AppsList.get(i).packagename)&& ap.foreground&&ap.name.equals(AppsList.get(i).packagename)){
-                            AppsList.get(i).useTime+= estimatedTime/1000;
-                            debug("Ta usando o "+AppsList.get(i).packagename+ " " + AppsList.get(i).useTime);
+                if (printForegroundTask().equals(AppsList.get(i).packagename)){
+                    AppsList.get(i).useTime+= estimatedTime/1000;
+                    debug("Ta usando o "+AppsList.get(i).packagename+ " " + AppsList.get(i).useTime);
 
+                }
+            }
+        }
+            if (AppsList!=null) {
+                for (apptocheck aps : AppsList
+                        ) {
+                    if (aps.useTime > 7200 && !aps.twohournot) {
+                        final PackageManager pm = getApplicationContext().getPackageManager();
+                        ApplicationInfo ai;
+                        try {
+                            ai = pm.getApplicationInfo(aps.packagename, 0);
+                        } catch (final PackageManager.NameNotFoundException e) {
+                            ai = null;
                         }
+                        final String applicationName = (String) (ai != null ? pm.getApplicationLabel(ai) : "(unknown)");
+                        Notify(R.drawable.r, "Voce está usando o " + applicationName + " demais", "Você ja passou 2 horas usando", 1, MainActivity.class);
+                        aps.twohournot = true;
                     }
-                }
-            }
-            if (AppsList!=null){
-            for (apptocheck aps:AppsList
-                    ) {
-                if (aps.useTime > 7200 && !aps.twohournot) {
-                    final PackageManager pm = getApplicationContext().getPackageManager();
-                    ApplicationInfo ai;
-                    try {
-                        ai = pm.getApplicationInfo(aps.packagename, 0);
-                    } catch (final PackageManager.NameNotFoundException e) {
-                        ai = null;
-                    }
-                    final String applicationName = (String) (ai != null ? pm.getApplicationLabel(ai) : "(unknown)");
-                    Notify(R.drawable.r, "Voce está usando o " + applicationName + " demais", "Você ja passou 2 horas usando", 1, MainActivity.class);
-                    aps.twohournot = true;
                 }
             }
 
-            }
         }
 
        if (AppsList!=null) {
@@ -235,32 +232,14 @@ public class ViciService extends Service implements Runnable  {
                     ) {
                    serializable+=ap.getTxt()+"!";
                }
+               if (serializable!=null){
            serializable= serializable.replace("null","");
-           //debug(serializable);
+          // debug(serializable);
           editor.putString("apps", serializable);
-       }
+       }}
         editor.commit();
     }
-    }
 
-    File CreaterPath(String pathhh)
-    {   File path;
-        path =  Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
-        if (!path.exists())path.mkdirs();
-        File file = new File(    path,  pathhh);
-        if (!file.exists()) try {
-            file.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return file;
-    }
-
-    private void SetInterval()
-    {
-        try { Thread.sleep(1000); }
-        catch(InterruptedException e) { e.printStackTrace(); }
-    }
     void debug(String s)
     {
         Log.d("vicio", s);
