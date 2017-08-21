@@ -174,6 +174,7 @@ public class ViciService extends Service implements Runnable  {
         }
             Notify(R.drawable.r,"Veja o uso nas redes","Veja quanto tempo já foi gasto nas redes",0,MainActivity.class);
         }
+
         if (calendar.get(Calendar.DAY_OF_MONTH)!=day&&calendar.get(Calendar.HOUR_OF_DAY)==resetHour)
         {
             day = calendar.get(Calendar.DAY_OF_MONTH);

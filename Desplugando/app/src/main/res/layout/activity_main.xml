@@ -50,7 +50,10 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="visible">
+            android:visibility="visible"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
 
             <LinearLayout
                 android:id="@+id/ll"
@@ -58,6 +61,43 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:id="@+id/ResetLayout">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:id="@+id/textView2"
+                        android:layout_alignParentTop="true"
+                        android:text="Resetar as estatística :" />
+
+                    <RadioButton
+                        android:text="Diariamente"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="19dp"
+                        android:layout_marginStart="19dp"
+                        android:id="@+id/Diariamente"
+                        android:layout_below="@+id/textView2"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true" />
+
+                    <RadioButton
+                        android:text="Semanalmente"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/Semanal"
+                        android:checked="false"
+                        android:layout_below="@+id/textView2"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginRight="21dp"
+                        android:layout_marginEnd="21dp" />
+                </RelativeLayout>
 
                 <Button
                     android:text="Monitorar"

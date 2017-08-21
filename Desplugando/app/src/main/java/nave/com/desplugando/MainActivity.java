@@ -28,6 +28,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -48,9 +49,10 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
     TextView fb,wpp,insta,twitter;
     Button usobt,voltar,selectapp,removebt;
     RelativeLayout inicial,uso,modelo;
+    RadioButton dia,seman;
     List <apptocheck> AppsList;
     String PackToADD= null;
-
+    boolean diary;
     boolean  done;
 
     String[] InitialApps = new String[] {"com.facebook.katana","com.whatsapp","com.twitter.android","com.instagram.android"};
@@ -65,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
         done = false;
         ll = (LinearLayout) findViewById(R.id.ll);
         SharedPreferences sp = getSharedPreferences("prefs", Activity.MODE_PRIVATE);
+        diary = sp.getBoolean("diary",true);
 
         String applist =sp.getString("apps",null);
         if (applist==null)
@@ -163,9 +166,12 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
     @Override
     protected void onStart() {
 
+        SharedPreferences share = getSharedPreferences("prefs", Activity.MODE_PRIVATE);
+        final SharedPreferences.Editor editore=  share.edit();
 
         removebt= (Button)findViewById(R.id.Remove);
-
+        dia = (RadioButton)findViewById(R.id.Diariamente);
+        seman= (RadioButton)findViewById(R.id.Semanal);
         selectapp= (Button)findViewById(R.id.MonitorarApp);
         inicial =(RelativeLayout)findViewById(R.id.InicialLayout);
         uso = (RelativeLayout)findViewById(R.id.UsoLayout);
@@ -194,6 +200,35 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
 
                 appIntent=new Intent(view.getContext(),Chooser.class);
                 startActivityForResult(appIntent, 1);
+            }
+        });
+        if (diary)
+        {
+            dia.setChecked(true);
+            seman.setChecked(false);
+        }
+        else {
+            dia.setChecked(false);
+            seman.setChecked(true);
+        }
+        dia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dia.setChecked(true);
+                seman.setChecked(false);
+                diary= true ;
+                editore.putBoolean("diary",diary);
+                editore.apply();
+            }
+        });
+        seman.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dia.setChecked(false);
+                seman.setChecked(true);
+                diary= false;
+                editore.putBoolean("diary",diary);
+                editore.apply();
             }
         });
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
@@ -454,26 +489,29 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
         for(int i =0;i<ll.getChildCount();i++)
         {
 
-            if (ll.getChildAt(i) instanceof RelativeLayout)
-            {
+            if (ll.getChildAt(i) instanceof RelativeLayout ) {
 
-                TextView packname= null, usetime=null;
-                RelativeLayout rl =(RelativeLayout) ll.getChildAt(i);
-                for (int z =0;z<rl.getChildCount();z++)
-                {
-                if (rl.getChildAt(z) instanceof TextView) {
-                    if (( rl.getChildAt(z)).getVisibility() == View.INVISIBLE) {
-                        packname = (TextView) rl.getChildAt(z);
-                    } else usetime = (TextView) rl.getChildAt(z);
+                TextView packname = null, usetime = null;
+                RelativeLayout rl = (RelativeLayout) ll.getChildAt(i);
+                if (rl.getId()!=R.id.ResetLayout){
+                for (int z = 0; z < rl.getChildCount(); z++) {
+                    if (rl.getChildAt(z) instanceof TextView && !((TextView) rl.getChildAt(z)).getText().equals("Resetar as estatística :")) {
+                        if (rl.getChildAt(z) instanceof TextView) {
+                            if ((rl.getChildAt(z)).getVisibility() == View.INVISIBLE) {
+                                packname = (TextView) rl.getChildAt(z);
+                            } else usetime = (TextView) rl.getChildAt(z);
+                        }
+
+
+                    if (packname != null && packname.getText().toString() == FindWithPack(Apps, packname.getText().toString()).packagename) {
+
+                        usetime.setText(CriadordeHorario(FindWithPack(Apps, packname.getText().toString()).useTime));
+                    }
                 }
-              }
+                }
+                }
 
-              if (packname.getText().toString()== FindWithPack(Apps,packname.getText().toString()).packagename)
-              {
-
-                  usetime.setText(CriadordeHorario( FindWithPack(Apps,packname.getText().toString()).useTime));
-              }
-              }
+            }
 
         }
     }
