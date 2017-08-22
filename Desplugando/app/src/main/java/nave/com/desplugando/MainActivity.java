@@ -34,7 +34,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -55,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
     boolean diary;
     boolean  done;
 
+    List<Integer>toDoImages;
+    List<String>toDoTitles;
     String[] InitialApps = new String[] {"com.facebook.katana","com.whatsapp","com.twitter.android","com.instagram.android"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -193,6 +197,12 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
         total= (RelativeLayout)findViewById(R.id.UsoTotal);
         uso.setVisibility(View.VISIBLE);
         total.setVisibility(View.INVISIBLE);
+        toDoTitles= new ArrayList<>();
+        toDoImages = new ArrayList<>();
+        Integer[] temparray= {R.drawable.caminahr,R.drawable.conversar,R.drawable.esportes,R.drawable.museu,R.drawable.praia,R.drawable.surf};
+        toDoImages.addAll(Arrays.asList( temparray));
+        String[] temptitles = {"Caminhar","conversar com amigos","praticar esporte","ir ao museu","ir a praia","ir surfar"};
+        toDoTitles.addAll(Arrays.asList(temptitles));
 
         usototal.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -205,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
                     }
                     TextView Totaluse = (TextView)findViewById(R.id.Totaluse);
                     Totaluse.setText(CriadordeHorario(tempValue));
-                    CreateWhatDo((LinearLayout)findViewById(R.id.doLayout));
+                    CreateWhatDo((LinearLayout)findViewById(R.id.doLayout),tempValue);
                     uso.setVisibility(View.INVISIBLE);
                     total.setVisibility(View.VISIBLE);
                 }
@@ -444,10 +454,17 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
 
         return  horas+"h "+minutos+"min "+segundos2+"seg ";
     }
-    void CreateWhatDo(LinearLayout layout)
+    void CreateWhatDo(LinearLayout layout,int totaltime)
     {
+        int howmuch =totaltime;
+        if (totaltime%3600==0)
+        {
+            howmuch=1;
+        }
+        else if (totaltime%3600<=toDoImages.size())howmuch= totaltime%3600;
+        else howmuch= toDoImages.size();
 
-        for(int i=0;i<3;i++){
+        for(int i=0;i<howmuch;i++){
             RelativeLayout temp = (RelativeLayout)LayoutInflater.from(this).inflate(R.layout.whatdo,null);
         layout.addView(temp);
     }
