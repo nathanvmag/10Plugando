@@ -47,8 +47,8 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
     LinearLayout ll ;
     Handler h ;
     TextView fb,wpp,insta,twitter;
-    Button usobt,voltar,selectapp,removebt;
-    RelativeLayout inicial,uso,modelo;
+    Button selectapp,removebt,usototal,voltar;
+    RelativeLayout uso,total;
     RadioButton dia,seman;
     List <apptocheck> AppsList;
     String PackToADD= null;
@@ -162,6 +162,20 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
     {
         Log.d("vicio", s);
     }
+    @Override
+    protected  void onResume()
+    {
+        super.onResume();
+        ServiceStart();
+    }
+    @Override
+    protected  void onPause()
+    {
+       super.onPause();
+        unbindService(this);
+        mBound= false;
+        debug("Discnect");
+    }
 
     @Override
     protected void onStart() {
@@ -173,24 +187,37 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
         dia = (RadioButton)findViewById(R.id.Diariamente);
         seman= (RadioButton)findViewById(R.id.Semanal);
         selectapp= (Button)findViewById(R.id.MonitorarApp);
-        inicial =(RelativeLayout)findViewById(R.id.InicialLayout);
+        usototal= (Button)findViewById(R.id.totalbt);
+        voltar= (Button)findViewById(R.id.volt);
         uso = (RelativeLayout)findViewById(R.id.UsoLayout);
-        usobt= (Button)findViewById(R.id.usoBt);
-        inicial.setVisibility(View.INVISIBLE);
+        total= (RelativeLayout)findViewById(R.id.UsoTotal);
         uso.setVisibility(View.VISIBLE);
-        usobt.setOnClickListener(new View.OnClickListener() {
+        total.setVisibility(View.INVISIBLE);
+
+        usototal.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                inicial.setVisibility(View.INVISIBLE);
-                uso.setVisibility(View.VISIBLE);
+            public void onClick(View view) {
+                int tempValue =0;
+                if (mBound) {
+                    for(apptocheck apps: mService.AppsList)
+                    {
+                        tempValue+=apps.useTime;
+                    }
+                    TextView Totaluse = (TextView)findViewById(R.id.Totaluse);
+                    Totaluse.setText(CriadordeHorario(tempValue));
+                    CreateWhatDo((LinearLayout)findViewById(R.id.doLayout));
+                    uso.setVisibility(View.INVISIBLE);
+                    total.setVisibility(View.VISIBLE);
+                }
+
             }
         });
-        voltar = (Button)findViewById(R.id.voltarBt);
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                inicial.setVisibility(View.INVISIBLE);
                 uso.setVisibility(View.VISIBLE);
+                total.setVisibility(View.INVISIBLE);
+                ( (LinearLayout)findViewById(R.id.doLayout)).removeAllViews();
             }
         });
         selectapp.setOnClickListener(new View.OnClickListener() {
@@ -218,7 +245,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
                 seman.setChecked(false);
                 diary= true ;
                 editore.putBoolean("diary",diary);
-                editore.apply();
+                editore.commit();
             }
         });
         seman.setOnClickListener(new View.OnClickListener() {
@@ -228,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
                 seman.setChecked(true);
                 diary= false;
                 editore.putBoolean("diary",diary);
-                editore.apply();
+                editore.commit();
             }
         });
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
@@ -373,6 +400,17 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
         return false;
     }
     @Override
+    public void onBackPressed()
+    {
+        if (total.getVisibility()==View.VISIBLE)
+        {
+            uso.setVisibility(View.VISIBLE);
+            total.setVisibility(View.INVISIBLE);
+            ( (LinearLayout)findViewById(R.id.doLayout)).removeAllViews();
+
+        }
+    }
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
 
@@ -406,6 +444,14 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
 
         return  horas+"h "+minutos+"min "+segundos2+"seg ";
     }
+    void CreateWhatDo(LinearLayout layout)
+    {
+
+        for(int i=0;i<3;i++){
+            RelativeLayout temp = (RelativeLayout)LayoutInflater.from(this).inflate(R.layout.whatdo,null);
+        layout.addView(temp);
+    }
+    }
     void addnewRelative(LinearLayout tolayout,Drawable resID,String pkgname,int value)
     {
 
@@ -426,7 +472,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
                 ((ImageView) temp.getChildAt(i)).setImageDrawable(resID);
             }
         }
-        tolayout.addView(temp,tolayout.getChildCount()-3);
+        tolayout.addView(temp,0);
 
     }
     public boolean isPackageExisted(String targetPackage){
@@ -443,8 +489,6 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
     public void run() {
         if (mBound&&PackToADD!=null)
         {
-
-
             if (!checkIfisMonitoring(PackToADD,mService.AppsList)){
                 Drawable icon = null;
                 try {
@@ -467,7 +511,6 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
         }
         if (mBound)
         {
-
             WriteValues(ll, mService.AppsList);
         }
         h.postDelayed(this,1000);

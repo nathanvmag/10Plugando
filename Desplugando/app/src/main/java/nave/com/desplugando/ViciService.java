@@ -53,6 +53,10 @@ public class ViciService extends Service implements Runnable  {
     long uptadatetime;
     String serialized ;
     private final LocalBinder connection = new LocalBinder();
+    boolean daycontrol;
+    int week;
+    int gambtimer;
+    boolean countNoty;
 
     // ... do something ...
 
@@ -72,9 +76,12 @@ public class ViciService extends Service implements Runnable  {
         active = true;
         calendar = Calendar.getInstance();
         day = (int)calendar.get(Calendar.DAY_OF_MONTH);
+        week= sp.getInt("week",(int)calendar.get(Calendar.WEEK_OF_MONTH));
         uptadatetime= calendar.getTime().getTime();
         h= new Handler();
         h.post(this);
+        countNoty= false;
+        gambtimer=0;
     }
 
     @Override
@@ -129,7 +136,7 @@ public class ViciService extends Service implements Runnable  {
             currentApp = tasks.get(0).processName;
         }
 
-        Log.e("adapter", "Current App in foreground is: " + currentApp);
+      //  Log.e("adapter", "Current App in foreground is: " + currentApp);
         return currentApp;
     }
 
@@ -138,9 +145,11 @@ public class ViciService extends Service implements Runnable  {
 
         long estimatedTime = System.currentTimeMillis() - uptadatetime;
         uptadatetime=  System.currentTimeMillis();
-
+        calendar = Calendar.getInstance();
         SharedPreferences sp = getSharedPreferences("prefs", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
+        daycontrol= sp.getBoolean("diary",false);
+
         if (AppsList==null)
         {
             List<apptocheck> tempora= new ArrayList<>();
@@ -174,25 +183,35 @@ public class ViciService extends Service implements Runnable  {
         }
             Notify(R.drawable.r,"Veja o uso nas redes","Veja quanto tempo já foi gasto nas redes",0,MainActivity.class);
         }
+        if (!daycontrol)
+        {
+            //debug(calendar.get(Calendar.WEEK_OF_MONTH)+" "+ week + " "+ calendar.get(Calendar.HOUR_OF_DAY));
+            if (calendar.get(Calendar.DAY_OF_MONTH)!=day&&calendar.get(Calendar.HOUR_OF_DAY)==resetHour&&calendar.get(Calendar.WEEK_OF_MONTH)!=week) {
+                day = calendar.get(Calendar.DAY_OF_MONTH);
+                week = calendar.get(Calendar.WEEK_OF_MONTH);
+                Notify(R.drawable.r,"As estatisticas da semana serão resetadas ","Veja quanto tempo já foi gasto nas redes sociais",0,MainActivity.class);
+                startcount();
+        }
+
+        }
 
         if (calendar.get(Calendar.DAY_OF_MONTH)!=day&&calendar.get(Calendar.HOUR_OF_DAY)==resetHour)
         {
             day = calendar.get(Calendar.DAY_OF_MONTH);
+
+            if (daycontrol){
             Notify(R.drawable.r,"As estatisticas serão resetadas","Veja quanto tempo já foi gasto nas redes sociais",0,MainActivity.class);
-            Timer t = new Timer();
-            t.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    for (apptocheck aps:AppsList
-                         ) {aps.twohournot= false;
-                        aps.useTime=0;
+                startcount();
 
-                    }
-
-                    Notify(R.drawable.r,"As estatisticas Foram resetadas","Veja quanto tempo já foi gasto nas redes sociais",0,MainActivity.class);
-                }
-            },1800000);
         }
+        else {
+                for (apptocheck aps:AppsList
+                        ) {aps.twohournot= false;
+
+                }
+            }
+        }
+
 
       if (AppsList!=null){
         for(int i=0;i<AppsList.size();i++)
@@ -238,7 +257,31 @@ public class ViciService extends Service implements Runnable  {
           // debug(serializable);
           editor.putString("apps", serializable);
        }}
+        Reset();
+        editor.putInt("week",week);
         editor.commit();
+    }
+    void startcount()
+    {
+        gambtimer=0;
+        countNoty=true;
+    }
+    void Reset()
+    {
+        if (countNoty){
+            if (gambtimer>30)
+            {
+                gambtimer= 0;
+                countNoty=false;
+                for (apptocheck aps:AppsList
+                        ) {aps.twohournot= false;
+                    aps.useTime=0;
+                }
+                Notify(R.drawable.r,"As estatisticas Foram resetadas","Veja quanto tempo já foi gasto nas redes sociais",0,MainActivity.class);
+            }
+            else gambtimer++;
+            debug(""+gambtimer);
+        }
     }
 
     void debug(String s)

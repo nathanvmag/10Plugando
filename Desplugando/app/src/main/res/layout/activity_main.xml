@@ -13,47 +13,20 @@
     >
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/InicialLayout"
-        android:visibility="invisible">
-
-        <Button
-            android:text="Abrir Uso"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="85dp"
-            android:id="@+id/usoBt"
-            android:layout_width="200dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
-
-        <Button
-            android:text="Conquistas"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="19dp"
-            android:id="@+id/button2"
-            android:layout_centerHorizontal="true" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
         android:id="@+id/UsoLayout"
         android:layout_width="450dp"
         android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:visibility="invisible">
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="visible"
-            android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:visibility="visible">
 
             <LinearLayout
                 android:id="@+id/ll"
@@ -62,65 +35,141 @@
                 android:orientation="vertical">
 
 
-                <RelativeLayout
+                <LinearLayout
+                    android:id="@+id/xdasd"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:id="@+id/ResetLayout">
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:id="@+id/textView2"
-                        android:layout_alignParentTop="true"
-                        android:text="Resetar as estatística :" />
+                    <RelativeLayout
+                        android:id="@+id/ResetLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
-                    <RadioButton
-                        android:text="Diariamente"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="19dp"
-                        android:layout_marginStart="19dp"
-                        android:id="@+id/Diariamente"
-                        android:layout_below="@+id/textView2"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true" />
+                        <TextView
+                            android:id="@+id/textView2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerHorizontal="true"
+                            android:text="Resetar as estatística :" />
 
-                    <RadioButton
-                        android:text="Semanalmente"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/Semanal"
-                        android:checked="false"
-                        android:layout_below="@+id/textView2"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginRight="21dp"
-                        android:layout_marginEnd="21dp" />
-                </RelativeLayout>
+                        <RadioButton
+                            android:id="@+id/Diariamente"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_below="@+id/textView2"
+                            android:layout_marginLeft="19dp"
+                            android:layout_marginStart="19dp"
+                            android:text="Diariamente" />
+
+                        <RadioButton
+                            android:id="@+id/Semanal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_below="@+id/textView2"
+                            android:layout_marginEnd="21dp"
+                            android:layout_marginRight="21dp"
+                            android:checked="false"
+                            android:text="Semanalmente" />
+                    </RelativeLayout>
+                </LinearLayout>
 
                 <Button
-                    android:text="Monitorar"
+                    android:id="@+id/totalbt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/MonitorarApp" />
+                    android:text="uso total" />
 
                 <Button
-                    android:text="Remover"
+                    android:id="@+id/MonitorarApp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/Remove" />
+                    android:text="Monitorar" />
 
                 <Button
-                    android:id="@+id/voltarBt"
+                    android:id="@+id/Remove"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Voltar"
-                    android:visibility="invisible" />
+                    android:text="Remover" />
 
             </LinearLayout>
         </ScrollView>
 
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/UsoTotal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/volt"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textView5">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:fillViewport="false">
+
+                <LinearLayout
+                    android:id="@+id/doLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </ScrollView>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="116dp"
+            android:text="Nesse tempo voce poderia"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/volt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="voltar" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="O uso total foi de:"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/Totaluse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView3"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="17dp"
+            android:text="3h 20min 32seg"
+            android:textAlignment="center"
+            android:textSize="30sp" />
     </RelativeLayout>
 
 </RelativeLayout>
