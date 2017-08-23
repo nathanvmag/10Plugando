@@ -14,16 +14,17 @@ public class apptocheck implements Serializable{
     public String packagename;
     public int useTime;
     //public Drawable icon;
-    public boolean twohournot;
-    public apptocheck(String pack,int time,String value)
+    public boolean twohournot,fourournot;
+    public apptocheck(String pack,int time,String value,String value2)
     {
         packagename=pack;
         useTime=time;
         twohournot= Boolean.valueOf(value);
+        fourournot= Boolean.valueOf(value2);
 
     }
     String getTxt()
     {
-        return packagename+"°"+useTime+"°"+twohournot;
+        return packagename+"°"+useTime+"°"+twohournot+"°"+fourournot;
     }
 }

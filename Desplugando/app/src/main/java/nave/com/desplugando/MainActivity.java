@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -38,6 +39,8 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 public class MainActivity extends AppCompatActivity implements Runnable,ServiceConnection
@@ -87,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                 }
-                AppsList.add(new apptocheck(InitialApps[i],0,"false"));
+                AppsList.add(new apptocheck(InitialApps[i],0,"false","false"));
                 addnewRelative(ll,icon,InitialApps[i],0);
             }
         }
@@ -108,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
                 for (int i=0;i<classes.length;i++)
                 {
                     String[]a = classes[i].split("°");
-                    tempora.add( new apptocheck(a[0], Integer.parseInt(a[1]),a[2]));
+                    tempora.add( new apptocheck(a[0], Integer.parseInt(a[1]),a[2],a[3]));
                 }
                 AppsList= tempora;
                 for(int i=0;i<AppsList.size();i++)
@@ -456,20 +459,43 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
     }
     void CreateWhatDo(LinearLayout layout,int totaltime)
     {
+        int[] suffler = new int[toDoImages.size()];
+        for (int i =0;i<suffler.length;i++)suffler[i]=i;
+        shuffleArray(suffler);
+
         int howmuch =totaltime;
-        if (totaltime%3600==0)
+
+        if (totaltime/3600==0)
         {
             howmuch=1;
         }
-        else if (totaltime%3600<=toDoImages.size())howmuch= totaltime%3600;
+        else if (totaltime/3600<=toDoImages.size())howmuch= totaltime/3600;
         else howmuch= toDoImages.size();
 
         for(int i=0;i<howmuch;i++){
             RelativeLayout temp = (RelativeLayout)LayoutInflater.from(this).inflate(R.layout.whatdo,null);
+            ((ImageView) temp.findViewById(R.id.doImage)).setImageBitmap(BitmapFactory.decodeResource(getResources(),
+                    toDoImages.get(suffler[i])));
+            ( (TextView)temp.findViewById(R.id.whatis)).setText(toDoTitles.get(suffler[i]));
         layout.addView(temp);
     }
+
+
     }
-    void addnewRelative(LinearLayout tolayout,Drawable resID,String pkgname,int value)
+    static void shuffleArray(int[] ar)
+    {
+        // If running on Java 6 or older, use `new Random()` on RHS here
+        Random rnd = new Random();
+        for (int i = ar.length - 1; i > 0; i--)
+        {
+            int index = rnd.nextInt(i + 1);
+            // Simple swap
+            int a = ar[index];
+            ar[index] = ar[i];
+            ar[i] = a;
+        }
+    }
+    void addnewRelative(LinearLayout tolayout, Drawable resID, final String pkgname, int value)
     {
 
         RelativeLayout temp = (RelativeLayout)LayoutInflater.from(this).inflate(R.layout.tey,null);
@@ -487,6 +513,13 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
             else if (temp.getChildAt(i) instanceof ImageView)
             {
                 ((ImageView) temp.getChildAt(i)).setImageDrawable(resID);
+                ((ImageView) temp.getChildAt(i)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent i = getPackageManager().getLaunchIntentForPackage(pkgname);
+                        startActivity(i);
+                    }
+                });
             }
         }
         tolayout.addView(temp,0);
@@ -513,7 +546,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                 }
-                mService.AppsList.add(new apptocheck(PackToADD,0,"false"));
+                mService.AppsList.add(new apptocheck(PackToADD,0,"false","false"));
                 addnewRelative(ll,icon,PackToADD,0);
                 PackToADD= null;
             }else {

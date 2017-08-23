@@ -136,7 +136,7 @@ public class ViciService extends Service implements Runnable  {
             currentApp = tasks.get(0).processName;
         }
 
-      //  Log.e("adapter", "Current App in foreground is: " + currentApp);
+      // Log.e("adapter", "Current App in foreground is: " + currentApp);
         return currentApp;
     }
 
@@ -161,7 +161,7 @@ public class ViciService extends Service implements Runnable  {
             for (int i=0;i<classes.length;i++)
             {
                 String[]a = classes[i].split("°");
-                    tempora.add( new apptocheck(a[0], Integer.parseInt(a[1]),a[2]));
+                    tempora.add( new apptocheck(a[0], Integer.parseInt(a[1]),a[2],a[3]));
                 }
             AppsList= tempora;
                    }
@@ -207,6 +207,7 @@ public class ViciService extends Service implements Runnable  {
         else {
                 for (apptocheck aps:AppsList
                         ) {aps.twohournot= false;
+                    aps.fourournot= false;
 
                 }
             }
@@ -240,6 +241,19 @@ public class ViciService extends Service implements Runnable  {
                         final String applicationName = (String) (ai != null ? pm.getApplicationLabel(ai) : "(unknown)");
                         Notify(R.drawable.r, "Voce está usando o " + applicationName + " demais", "Você ja passou 2 horas usando", 1, MainActivity.class);
                         aps.twohournot = true;
+                    }
+                    if (aps.useTime>14400&&!aps.fourournot)
+                    {
+                        final PackageManager pm = getApplicationContext().getPackageManager();
+                        ApplicationInfo ai;
+                        try {
+                            ai = pm.getApplicationInfo(aps.packagename, 0);
+                        } catch (final PackageManager.NameNotFoundException e) {
+                            ai = null;
+                        }
+                        final String applicationName = (String) (ai != null ? pm.getApplicationLabel(ai) : "(unknown)");
+                        Notify(R.drawable.r, "Voce está usando o " + applicationName + " demais", "Você ja passou 4 horas usando", 1, MainActivity.class);
+                        aps.fourournot = true;
                     }
                 }
             }
@@ -275,6 +289,7 @@ public class ViciService extends Service implements Runnable  {
                 countNoty=false;
                 for (apptocheck aps:AppsList
                         ) {aps.twohournot= false;
+                    aps.fourournot= false;
                     aps.useTime=0;
                 }
                 Notify(R.drawable.r,"As estatisticas Foram resetadas","Veja quanto tempo já foi gasto nas redes sociais",0,MainActivity.class);
