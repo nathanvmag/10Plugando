@@ -111,9 +111,12 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
                 for (int i=0;i<classes.length;i++)
                 {
                     String[]a = classes[i].split("°");
+                    if (a[2]==null)a[2]= "false";
+                    if (a[3]==null)a[3]="false";
                     tempora.add( new apptocheck(a[0], Integer.parseInt(a[1]),a[2],a[3]));
                 }
                 AppsList= tempora;
+
                 for(int i=0;i<AppsList.size();i++)
                 {
                     Drawable icon =null ;
@@ -403,6 +406,24 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
         }
         return temp.toArray(new String[0]);
     }
+
+    public static int[] BubbleSort( int[] arrayToBeSorted)
+    {
+        int auxNumber = 0;
+        for (int i = 0; i < arrayToBeSorted.length; i++)
+        {
+            for (int j = 0; j < arrayToBeSorted.length - 1; j++)
+            {
+                if (arrayToBeSorted[j] > arrayToBeSorted[j + 1])
+                {
+                    auxNumber = arrayToBeSorted[j];
+                    arrayToBeSorted[j] = arrayToBeSorted[j + 1];
+                    arrayToBeSorted[j + 1] = auxNumber;
+                }
+            }
+        }
+        return arrayToBeSorted;
+    }
     boolean checkIfisMonitoring(String s,List<apptocheck> list)
 
     {
@@ -465,12 +486,13 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
 
         int howmuch =totaltime;
 
-        if (totaltime/3600==0)
+        if (totaltime/3600<2)
         {
-            howmuch=1;
+            howmuch=0;
         }
         else if (totaltime/3600<=toDoImages.size())howmuch= totaltime/3600;
         else howmuch= toDoImages.size();
+        findViewById(R.id.textView5).setVisibility(View.VISIBLE);
 
         for(int i=0;i<howmuch;i++){
             RelativeLayout temp = (RelativeLayout)LayoutInflater.from(this).inflate(R.layout.whatdo,null);
@@ -479,6 +501,15 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
             ( (TextView)temp.findViewById(R.id.whatis)).setText(toDoTitles.get(suffler[i]));
         layout.addView(temp);
     }
+        if (howmuch==0)
+        {
+            findViewById(R.id.textView5).setVisibility(View.INVISIBLE);
+            RelativeLayout temp = (RelativeLayout)LayoutInflater.from(this).inflate(R.layout.whatdo,null);
+            ((ImageView) temp.findViewById(R.id.doImage)).setImageBitmap(BitmapFactory.decodeResource(getResources(),
+                   R.drawable.trofeu));
+            ( (TextView)temp.findViewById(R.id.whatis)).setText("Parabéns, você usa pouco as redes sociais");
+            layout.addView(temp);
+        }
 
 
     }
@@ -556,11 +587,13 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
         }
         if (mBound&&!done)
         {
+           // if (AppsList!=null)  AppsList = ViciService.Sort(AppsList);
             mService.AppsList= AppsList;
             done = true;
         }
         if (mBound)
         {
+         //   mService.AppsList= ViciService.Sort(mService.AppsList);
             WriteValues(ll, mService.AppsList);
         }
         h.postDelayed(this,1000);

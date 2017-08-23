@@ -139,6 +139,29 @@ public class ViciService extends Service implements Runnable  {
       // Log.e("adapter", "Current App in foreground is: " + currentApp);
         return currentApp;
     }
+   public static List<apptocheck> Sort (List<apptocheck>apps)
+    {
+        int[] temparray = new int[apps.size()];
+        for (int i=0;i<apps.size();i++)
+        {
+            temparray[i]=apps.get(i).useTime;
+        }
+        temparray =MainActivity.BubbleSort(temparray);
+        List<apptocheck>templist= new ArrayList<>();
+        for (int i=0;i<temparray.length;i++)
+        {
+            templist.add(getappwithUsage(apps,temparray[i]));
+        }
+        return templist;
+    }
+    public  static  apptocheck getappwithUsage(List<apptocheck> list,int usage)
+    {
+        for(apptocheck app:list)
+        {
+            if (app.useTime==usage)return  app;
+        }
+        return null;
+    }
 
     void task()  {
 
@@ -161,6 +184,8 @@ public class ViciService extends Service implements Runnable  {
             for (int i=0;i<classes.length;i++)
             {
                 String[]a = classes[i].split("°");
+                if (a[2]==null)a[2]= "false";
+                if (a[3]==null)a[3]="false";
                     tempora.add( new apptocheck(a[0], Integer.parseInt(a[1]),a[2],a[3]));
                 }
             AppsList= tempora;
