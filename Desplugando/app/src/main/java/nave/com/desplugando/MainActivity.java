@@ -108,6 +108,9 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
             {
                 debug("Ira Deserializar o "+serialized);
                 String[] classes = serialized.split("!");
+               classes = sort(classes);
+
+
                 for (int i=0;i<classes.length;i++)
                 {
                     String[]a = classes[i].split("°");
@@ -146,7 +149,34 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
         }
 
 
-        }private boolean isAccessGranted() {
+        }
+        String[] sort (String[]toSort)
+        {
+            int[] values= new int[toSort.length];
+            String[]Organized= new String[toSort.length];
+            for(int i =0;i<toSort.length;i++)
+            {
+                String[]a = toSort[i].split("°");
+                values[i]= Integer.parseInt(a[1]);
+            }
+            values = BubbleSort(values);
+            for (int i=0;i<values.length;i++)
+            {
+                Organized[i]=GetfromArray(toSort,values[i]);
+            }
+            return Organized;
+        }
+    String GetfromArray(String[]toFind,int whatis)
+    {
+        for(String s : toFind)
+        {
+            String[] a = s.split("°");
+            if (Integer.parseInt(a[1])==whatis)
+                return s;
+        }
+        return null;
+    }
+    private boolean isAccessGranted() {
 
         if (Build.VERSION.SDK_INT>=19){
             try {
