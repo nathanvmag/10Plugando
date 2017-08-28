@@ -106,13 +106,14 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
             serialized= sp.getString("apps",null);
             if (serialized!=null)
             {
-                debug("Ira Deserializar o "+serialized);
+
                 String[] classes = serialized.split("!");
                classes = sort(classes);
 
 
                 for (int i=0;i<classes.length;i++)
                 {
+                    debug("Ira Deserializar o "+classes[i]);
                     String[]a = classes[i].split("°");
                     if (a[2]==null)a[2]= "false";
                     if (a[3]==null)a[3]="false";
@@ -162,17 +163,28 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
             values = BubbleSort(values);
             for (int i=0;i<values.length;i++)
             {
-                Organized[i]=GetfromArray(toSort,values[i]);
+                Organized[i]=GetfromArray(toSort,values[i],Organized);
             }
             return Organized;
         }
-    String GetfromArray(String[]toFind,int whatis)
+    String GetfromArray(String[]toFind,int whatis,String[]current)
     {
         for(String s : toFind)
         {
             String[] a = s.split("°");
             if (Integer.parseInt(a[1])==whatis)
-                return s;
+            {
+                int control=0;
+                for (int i=0;i<current.length;i++)
+                {
+                   if ( !Arrays.asList(current).contains(s)){
+                       return s;
+                   }
+
+
+                }
+
+        }
         }
         return null;
     }
@@ -198,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
 
 
 
-    void debug(String s)
+    public static void debug(String s)
     {
         Log.d("vicio", s);
     }

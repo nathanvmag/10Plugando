@@ -4,9 +4,11 @@ import android.app.ListActivity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -14,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,19 +31,34 @@ public class Chooser extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chooser_layout);
-
+        int test =0;
         PackageManager pm=getPackageManager();
         Intent main=new Intent(Intent.ACTION_MAIN, null);
 
         main.addCategory(Intent.CATEGORY_LAUNCHER);
         List<ResolveInfo> launchables=pm.queryIntentActivities(main, 0);
-        Collections.sort(launchables,
+        List<ResolveInfo> apps = new ArrayList<>();
+        for (ResolveInfo i : launchables)
+        {
+            if (!isSystemPackage(i))
+            {
+                test++;
+                apps.add(i);
+            }
+        }
+        Collections.sort(apps,
                 new ResolveInfo.DisplayNameComparator(pm));
 
-        adapter=new AppAdapter(pm, launchables);
+        adapter=new AppAdapter(pm, apps);
         setListAdapter(adapter);
     }
-
+    private boolean isSystemPackage(ResolveInfo resolveInfo) {
+        return ((resolveInfo.activityInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
+    }
+    public static void debug(String s)
+    {
+        Log.d("vicio", s);
+    }
     @Override
     protected void onListItemClick(ListView l, View v,
                                    int position, long id) {

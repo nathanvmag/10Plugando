@@ -11,7 +11,7 @@
         android:layout_alignParentTop="true"
         android:text="Selecione um aplicativo para remover"
         android:textAlignment="center"
-        android:textSize="18sp"
+        android:textSize="14sp"
         android:typeface="normal" />
 
     <Spinner
