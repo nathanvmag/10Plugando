@@ -20,8 +20,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.support.v4.widget.SlidingPaneLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.MonthDisplayHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -52,9 +54,10 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
     LinearLayout ll ;
     Handler h ;
     TextView fb,wpp,insta,twitter;
-    Button selectapp,removebt,usototal,voltar;
-    RelativeLayout uso,total;
+    Button selectapp,removebt,usototal,voltar,config;
+    RelativeLayout uso,total,configuration,father;
     RadioButton dia,seman;
+    ImageView SplashScreen;
     List <apptocheck> AppsList;
     String PackToADD= null;
     boolean diary;
@@ -73,9 +76,12 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
         h.post(this);
         done = false;
         ll = (LinearLayout) findViewById(R.id.ll);
+        father= (RelativeLayout)findViewById(R.id.activity_main);
         SharedPreferences sp = getSharedPreferences("prefs", Activity.MODE_PRIVATE);
         diary = sp.getBoolean("diary",true);
-
+        SplashScreen= (ImageView)findViewById(R.id.SplashScreen);
+        SplashScreen.setAlpha(1f);
+        SplashScreen.setVisibility(View.VISIBLE);
         String applist =sp.getString("apps",null);
         if (applist==null)
         {
@@ -241,10 +247,13 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
         selectapp= (Button)findViewById(R.id.MonitorarApp);
         usototal= (Button)findViewById(R.id.totalbt);
         voltar= (Button)findViewById(R.id.volt);
+        config= (Button) findViewById(R.id.configsbt);
         uso = (RelativeLayout)findViewById(R.id.UsoLayout);
         total= (RelativeLayout)findViewById(R.id.UsoTotal);
+        configuration=(RelativeLayout)findViewById(R.id.Configs);
         uso.setVisibility(View.VISIBLE);
         total.setVisibility(View.INVISIBLE);
+        configuration.setVisibility(View.INVISIBLE);
         toDoTitles= new ArrayList<>();
         toDoImages = new ArrayList<>();
         Integer[] temparray= {R.drawable.caminahr,R.drawable.conversar,R.drawable.esportes,R.drawable.museu,R.drawable.praia,R.drawable.surf};
@@ -270,12 +279,27 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
 
             }
         });
+
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 uso.setVisibility(View.VISIBLE);
                 total.setVisibility(View.INVISIBLE);
                 ( (LinearLayout)findViewById(R.id.doLayout)).removeAllViews();
+            }
+        });
+        config.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                uso.setVisibility(View.INVISIBLE);
+                configuration.setVisibility(View.VISIBLE);
+            }
+        });
+        findViewById(R.id.backuso).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                uso.setVisibility(View.VISIBLE);
+                configuration.setVisibility(View.INVISIBLE);
             }
         });
         selectapp.setOnClickListener(new View.OnClickListener() {
@@ -610,6 +634,11 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
 
     @Override
     public void run() {
+        SplashScreen.setAlpha(lerp(SplashScreen.getAlpha(),0,0.05f));
+        if (SplashScreen.getAlpha()<=0.1f)
+        {
+            father.setPadding(16,16,16,16);
+        }
         if (mBound&&PackToADD!=null)
         {
             if (!checkIfisMonitoring(PackToADD,mService.AppsList)){
@@ -638,7 +667,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
          //   mService.AppsList= ViciService.Sort(mService.AppsList);
             WriteValues(ll, mService.AppsList);
         }
-        h.postDelayed(this,1000);
+        h.postDelayed(this,30);
     }
     void ServiceStart()
     {
@@ -718,4 +747,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
         return false;
     }
 
+    float lerp(float v0, float v1, float t) {
+        return (1 - t) * v0 + t * v1;
+    }
 }
