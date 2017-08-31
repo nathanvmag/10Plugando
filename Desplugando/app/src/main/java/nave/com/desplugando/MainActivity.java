@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
     String PackToADD= null;
     boolean diary;
     boolean  done;
-
+    int splashtime;
     List<Integer>toDoImages;
     List<String>toDoTitles;
     String[] InitialApps = new String[] {"com.facebook.katana","com.whatsapp","com.twitter.android","com.instagram.android"};
@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
         SplashScreen= (ImageView)findViewById(R.id.SplashScreen);
         SplashScreen.setAlpha(1f);
         SplashScreen.setVisibility(View.VISIBLE);
+        splashtime=0;
         String applist =sp.getString("apps",null);
         if (applist==null)
         {
@@ -634,7 +635,9 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
 
     @Override
     public void run() {
-        SplashScreen.setAlpha(lerp(SplashScreen.getAlpha(),0,0.05f));
+        if (splashtime>45)
+        SplashScreen.setAlpha(lerp(SplashScreen.getAlpha(),0,0.2f));
+        splashtime++;
         if (SplashScreen.getAlpha()<=0.1f)
         {
             father.setPadding(16,16,16,16);
