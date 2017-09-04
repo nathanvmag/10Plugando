@@ -227,7 +227,11 @@ public class ViciService extends Service implements Runnable  {
             if (daycontrol){
             Notify(R.drawable.r,"As estatisticas serão resetadas","Veja quanto tempo já foi gasto nas redes sociais",0,MainActivity.class);
                 startcount();
+                for (apptocheck aps:AppsList
+                        ) {aps.twohournot= false;
+                    aps.fourournot= false;
 
+                }
         }
         else {
                 for (apptocheck aps:AppsList

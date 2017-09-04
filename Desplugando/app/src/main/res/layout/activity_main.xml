@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="0dp"
@@ -11,13 +11,25 @@
     android:paddingTop="0dp"
     tools:context="nave.com.desplugando.MainActivity">
 
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:paddingBottom="0dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
+    tools:context="nave.com.desplugando.MainActivity"
+    android:layout_height="520dp">
+
     <RelativeLayout
         android:id="@+id/UsoLayout"
         android:layout_width="450dp"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:visibility="invisible">
+        android:visibility="visible">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -34,22 +46,10 @@
                 android:orientation="vertical">
 
 
-                <Button
-                    android:id="@+id/totalbt"
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_below="@+id/Remove"
-                    android:layout_weight="1"
-                    android:text="uso total" />
-
-                <Button
-                    android:id="@+id/configsbt"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Configurações" />
+                    android:layout_height="60dp"></LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/xdasd"
@@ -100,7 +100,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:text="voltar" />
+            android:text="voltar"
+            android:visibility="invisible" />
 
         <TextView
             android:id="@+id/textView3"
@@ -136,7 +137,7 @@
         android:id="@+id/Configs"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:visibility="invisible">
 
         <RelativeLayout
             android:id="@+id/ResetLayout"
@@ -200,15 +201,6 @@
                 android:layout_marginBottom="79dp"
                 android:text="Remover" />
 
-            <Button
-                android:id="@+id/backuso"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="26dp"
-                android:text="voltar" />
-
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
@@ -234,6 +226,47 @@
 
     </RelativeLayout>
 
+    </RelativeLayout>
+
+    <ImageView
+        app:srcCompat="@android:drawable/checkbox_off_background"
+        android:id="@+id/imageView"
+        android:scaleType="fitXY"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_height="50dp" />
+
+    <Button
+        android:id="@+id/configsbt"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        android:text="Configurações"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/totalbt"
+        android:layout_toEndOf="@+id/totalbt" />
+
+    <Button
+        android:id="@+id/totalbt"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        android:text="uso total"
+        android:layout_alignBaseline="@+id/backuso"
+        android:layout_alignBottom="@+id/backuso"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/backuso"
+        android:layout_height="50dp"
+        android:text="voltar"
+        android:layout_width="120dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/totalbt"
+        android:layout_toStartOf="@+id/totalbt" />
+
     <ImageView
         android:id="@+id/SplashScreen"
         android:layout_width="match_parent"
@@ -241,6 +274,9 @@
         android:adjustViewBounds="false"
         android:scaleType="fitXY"
         android:visibility="invisible"
-        app:srcCompat="@drawable/splashh" />
+        app:srcCompat="@drawable/splashh"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

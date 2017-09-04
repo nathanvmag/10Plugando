@@ -156,7 +156,6 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
 
         }
 
-
         }
         String[] sort (String[]toSort)
         {
@@ -276,6 +275,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
                     CreateWhatDo((LinearLayout)findViewById(R.id.doLayout),tempValue);
                     uso.setVisibility(View.INVISIBLE);
                     total.setVisibility(View.VISIBLE);
+                    configuration.setVisibility(View.INVISIBLE);
                 }
 
             }
@@ -294,6 +294,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
             public void onClick(View view) {
                 uso.setVisibility(View.INVISIBLE);
                 configuration.setVisibility(View.VISIBLE);
+                total.setVisibility(View.INVISIBLE);
             }
         });
         findViewById(R.id.backuso).setOnClickListener(new View.OnClickListener() {
@@ -301,6 +302,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
             public void onClick(View view) {
                 uso.setVisibility(View.VISIBLE);
                 configuration.setVisibility(View.INVISIBLE);
+                total.setVisibility(View.INVISIBLE);
             }
         });
         selectapp.setOnClickListener(new View.OnClickListener() {
@@ -608,7 +610,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
                 else ( (TextView) temp.getChildAt(i)).setText(CriadordeHorario(value));
 
             }
-            else if (temp.getChildAt(i) instanceof ImageView)
+            else if (temp.getChildAt(i) instanceof ImageView && temp.getChildAt(i).getId()==R.id.img)
             {
                 ((ImageView) temp.getChildAt(i)).setImageDrawable(resID);
                 ((ImageView) temp.getChildAt(i)).setOnClickListener(new View.OnClickListener() {
