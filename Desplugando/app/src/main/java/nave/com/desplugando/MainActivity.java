@@ -14,6 +14,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -545,10 +546,12 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
         }
         else segundos2=segundos;
 
-        return  horas+"h "+minutos+"min "+segundos2+"seg ";
+        return ((horas>0)? horas+"h ":"") + ((minutos>0)?minutos+"min ":"" )+ ((segundos2>0)?segundos2+"seg ":"");
     }
     void CreateWhatDo(LinearLayout layout,int totaltime)
     {
+        if((layout).getChildCount() > 0)
+            (layout).removeAllViews();
         int[] suffler = new int[toDoImages.size()];
         for (int i =0;i<suffler.length;i++)suffler[i]=i;
         shuffleArray(suffler);
@@ -582,6 +585,13 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
 
 
     }
+   int randomColor()
+    {
+        Random rnd = new Random();
+        int color = Color.argb(130, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+        return  color;
+    }
+
     static void shuffleArray(int[] ar)
     {
         // If running on Java 6 or older, use `new Random()` on RHS here
@@ -599,6 +609,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
     {
 
         RelativeLayout temp = (RelativeLayout)LayoutInflater.from(this).inflate(R.layout.tey,null);
+        temp.setBackgroundColor(randomColor());
         for(int i =0;i<temp.getChildCount();i++)
         {
             if (temp.getChildAt(i) instanceof TextView)

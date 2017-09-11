@@ -238,35 +238,6 @@
         android:layout_alignParentEnd="true"
         android:layout_height="50dp" />
 
-    <Button
-        android:id="@+id/configsbt"
-        android:layout_width="120dp"
-        android:layout_height="50dp"
-        android:layout_weight="1"
-        android:text="Configurações"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/totalbt"
-        android:layout_toEndOf="@+id/totalbt" />
-
-    <Button
-        android:id="@+id/totalbt"
-        android:layout_width="120dp"
-        android:layout_height="50dp"
-        android:layout_weight="1"
-        android:text="uso total"
-        android:layout_alignBaseline="@+id/backuso"
-        android:layout_alignBottom="@+id/backuso"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:id="@+id/backuso"
-        android:layout_height="50dp"
-        android:text="voltar"
-        android:layout_width="120dp"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/totalbt"
-        android:layout_toStartOf="@+id/totalbt" />
-
     <ImageView
         android:id="@+id/SplashScreen"
         android:layout_width="match_parent"
@@ -278,5 +249,33 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/totalbt"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        android:text="uso total"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/configsbt"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        android:text="Configurações"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:id="@+id/backuso"
+        android:layout_height="50dp"
+        android:text="menu"
+        android:layout_width="120dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
