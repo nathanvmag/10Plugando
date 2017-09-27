@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
     int splashtime;
     List<Integer>toDoImages;
     List<String>toDoTitles;
+    ImageView barrinha ;
     String[] InitialApps = new String[] {"com.facebook.katana","com.whatsapp","com.twitter.android","com.instagram.android"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
         SplashScreen.setAlpha(1f);
         SplashScreen.setVisibility(View.VISIBLE);
         splashtime=0;
+        barrinha = (ImageView) findViewById(R.id.Barrinha);
         String applist =sp.getString("apps",null);
         if (applist==null)
         {
@@ -255,6 +257,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
         uso = (RelativeLayout)findViewById(R.id.UsoLayout);
         total= (RelativeLayout)findViewById(R.id.UsoTotal);
         configuration=(RelativeLayout)findViewById(R.id.Configs);
+        barrinha.setImageResource(R.drawable.bar2);
         uso.setVisibility(View.VISIBLE);
         total.setVisibility(View.INVISIBLE);
         configuration.setVisibility(View.INVISIBLE);
@@ -280,6 +283,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
                     uso.setVisibility(View.INVISIBLE);
                     total.setVisibility(View.VISIBLE);
                     configuration.setVisibility(View.INVISIBLE);
+                    barrinha.setImageResource(R.drawable.bar1);
                 }
 
             }
@@ -299,6 +303,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
                 uso.setVisibility(View.INVISIBLE);
                 configuration.setVisibility(View.VISIBLE);
                 total.setVisibility(View.INVISIBLE);
+                barrinha.setImageResource(R.drawable.bar3);
             }
         });
         findViewById(R.id.backuso).setOnClickListener(new View.OnClickListener() {
@@ -307,6 +312,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
                 uso.setVisibility(View.VISIBLE);
                 configuration.setVisibility(View.INVISIBLE);
                 total.setVisibility(View.INVISIBLE);
+                barrinha.setImageResource(R.drawable.bar2);
             }
         });
         selectapp.setOnClickListener(new View.OnClickListener() {
@@ -591,7 +597,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
    int randomColor()
     {
         Random rnd = new Random();
-        int color = Color.argb(130, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+        int color = Color.argb(255, 105, 141, 195);
         return  color;
     }
 
