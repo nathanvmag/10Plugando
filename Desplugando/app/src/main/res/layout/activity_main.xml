@@ -44,12 +44,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
+                2
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"></LinearLayout>
+                    android:layout_height="60dp"
+                    android:orientation="horizontal"></LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/xdasd"

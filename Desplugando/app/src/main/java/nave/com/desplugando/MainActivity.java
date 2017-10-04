@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
     List<Integer>toDoImages;
     List<String>toDoTitles;
     ImageView barrinha ;
+    int controlercor;
     String[] InitialApps = new String[] {"com.facebook.katana","com.whatsapp","com.twitter.android","com.instagram.android"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +93,11 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
         AppsList = new ArrayList<>() ;
         for (int i=0;i<InitialApps.length;i++)
         {
+            controlercor=sp.getInt("cor",0);
+            controlercor++;
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putInt("cor",controlercor);
+            editor.commit();
             if (isPackageExisted(InitialApps[i]))
             {
                 Drawable icon = null;
@@ -142,7 +148,12 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
                     } catch (PackageManager.NameNotFoundException e) {
                         e.printStackTrace();
                     }
+                    controlercor = sp.getInt("cor",0);
+                    controlercor++;
                     addnewRelative(ll,icon,AppsList.get(i).packagename,AppsList.get(i).useTime);
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putInt("cor",controlercor);
+                    editor.commit();
                 }
             }
 
@@ -618,7 +629,10 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
     {
 
         RelativeLayout temp = (RelativeLayout)LayoutInflater.from(this).inflate(R.layout.tey,null);
-        temp.setBackgroundColor(randomColor());
+        if (controlercor%2==0) {
+            temp.setBackgroundColor(randomColor());
+        }
+        else temp.setBackgroundColor(Color.argb(255,255,255,255));
         for(int i =0;i<temp.getChildCount();i++)
         {
             if (temp.getChildAt(i) instanceof TextView)
