@@ -22,11 +22,14 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v4.widget.SlidingPaneLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.MonthDisplayHelper;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -71,8 +74,18 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
     String[] InitialApps = new String[] {"com.facebook.katana","com.whatsapp","com.twitter.android","com.instagram.android"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().hide();
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowCustomEnabled(true);
+
+        LayoutInflater inflator = (LayoutInflater) this .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflator.inflate(R.layout.image, null);
+
+        actionBar.setCustomView(v);
         intent = new Intent(this,ViciService.class);
         ServiceStart();
         h= new Handler();
@@ -565,8 +578,9 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
             }
         }
         else segundos2=segundos;
-
-        return ((horas>0)? horas+"h ":"") + ((minutos>0)?minutos+"min ":"" )+ ((segundos2>0)?segundos2+"seg ":"");
+        if (((horas>0)? horas+"h ":"") + ((minutos>0)?minutos+"min ":"" )+ ((segundos2>0)?segundos2+"seg ":"") !="")
+        return((horas>0)? horas+"h ":"") + ((minutos>0)?minutos+"min ":"" )+ ((segundos2>0)?segundos2+"seg ":"") ;
+        else return "Sem uso";
     }
     void CreateWhatDo(LinearLayout layout,int totaltime)
     {
@@ -641,8 +655,14 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
                        )
                    (
                                (TextView) temp.getChildAt(i)).setText(pkgname);
-                else ( (TextView) temp.getChildAt(i)).setText(CriadordeHorario(value));
+                else{
+                   ( (TextView) temp.getChildAt(i)).setText(CriadordeHorario(value));
+                   if (controlercor%2!=0) {
+                       ( (TextView) temp.getChildAt(i)).setTextColor(randomColor());
+                   }
+                   else ( (TextView) temp.getChildAt(i)).setTextColor(Color.argb(255,255,255,255));
 
+            }
             }
             else if (temp.getChildAt(i) instanceof ImageView && temp.getChildAt(i).getId()==R.id.img)
             {
@@ -677,6 +697,8 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
         if (SplashScreen.getAlpha()<=0.1f)
         {
             father.setPadding(16,16,16,16);
+            getSupportActionBar().show();
+            SplashScreen.setVisibility(View.INVISIBLE);
         }
         if (mBound&&PackToADD!=null)
         {

@@ -21,7 +21,8 @@
         android:layout_centerVertical="true"
         android:text="5h 30min 40seg"
         android:textAlignment="textEnd"
-        android:textSize="22sp" />
+        android:textSize="22sp"
+        android:textStyle="normal|bold" />
 
     <ImageView
         android:id="@+id/img"
