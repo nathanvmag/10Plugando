@@ -58,6 +58,7 @@ public class ViciService extends Service implements Runnable  {
     int gambtimer;
     boolean countNoty;
 
+
     // ... do something ...
 
     @Override
@@ -230,6 +231,7 @@ public class ViciService extends Service implements Runnable  {
                 for (apptocheck aps:AppsList
                         ) {aps.twohournot= false;
                     aps.fourournot= false;
+                    aps.dayuse=0;
 
                 }
         }
@@ -237,6 +239,7 @@ public class ViciService extends Service implements Runnable  {
                 for (apptocheck aps:AppsList
                         ) {aps.twohournot= false;
                     aps.fourournot= false;
+                    aps.dayuse=0;
 
                 }
             }
@@ -251,6 +254,7 @@ public class ViciService extends Service implements Runnable  {
 
                 if (printForegroundTask().equals(AppsList.get(i).packagename)){
                     AppsList.get(i).useTime+= estimatedTime/1000;
+                    AppsList.get(i).dayuse+= estimatedTime/1000;
                     debug("Ta usando o "+AppsList.get(i).packagename+ " " + AppsList.get(i).useTime);
 
                 }
@@ -259,7 +263,7 @@ public class ViciService extends Service implements Runnable  {
             if (AppsList!=null) {
                 for (apptocheck aps : AppsList
                         ) {
-                    if (aps.useTime > 7200 && !aps.twohournot) {
+                    if (aps.dayuse > 7200 && !aps.twohournot) {
                         final PackageManager pm = getApplicationContext().getPackageManager();
                         ApplicationInfo ai;
                         try {
@@ -271,7 +275,7 @@ public class ViciService extends Service implements Runnable  {
                         Notify(R.drawable.r, "Voce está usando o " + applicationName + " demais", "Você ja passou 2 horas usando", 1, MainActivity.class);
                         aps.twohournot = true;
                     }
-                    if (aps.useTime>14400&&!aps.fourournot)
+                    if (aps.dayuse>14400&&!aps.fourournot)
                     {
                         final PackageManager pm = getApplicationContext().getPackageManager();
                         ApplicationInfo ai;

@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class apptocheck implements Serializable{
 
     public String packagename;
-    public int useTime;
+    public int useTime,dayuse;
     //public Drawable icon;
     public boolean twohournot,fourournot;
     public apptocheck(String pack,int time,String value,String value2)
@@ -21,6 +21,7 @@ public class apptocheck implements Serializable{
         useTime=time;
         twohournot= Boolean.valueOf(value);
         fourournot= Boolean.valueOf(value2);
+
 
     }
     String getTxt()

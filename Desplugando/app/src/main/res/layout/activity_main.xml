@@ -9,7 +9,9 @@
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
     android:paddingTop="0dp"
-    tools:context="nave.com.desplugando.MainActivity">
+    tools:context="nave.com.desplugando.MainActivity"
+    android:background="@android:color/white"
+    android:backgroundTint="@android:color/white">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -29,7 +31,9 @@
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:visibility="visible">
+        android:visibility="visible"
+        android:backgroundTint="@android:color/white"
+        tools:background="@android:color/white">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -43,18 +47,45 @@
                 android:id="@+id/ll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:backgroundTint="@android:color/white"
+                android:background="@android:color/white">
                 2
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <Button
+                        android:id="@+id/MonitorarApp"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:text="Monitorar"
+                        android:layout_weight="1"
+                        android:layout_marginTop="21dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true" />
+
+                    <Button
+                        android:id="@+id/Remove"
+                        android:layout_width="30dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/henrique"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="21dp"
+                        android:layout_height="30dp" />
+
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
-                    android:orientation="horizontal"></LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/xdasd"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
                     android:orientation="horizontal">
 
                 </LinearLayout>
@@ -68,7 +99,8 @@
         android:id="@+id/UsoTotal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible">
+        android:visibility="invisible"
+        android:backgroundTint="@android:color/white">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -76,7 +108,8 @@
             android:layout_above="@+id/volt"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/textView5">
+            android:layout_below="@+id/textView5"
+            android:background="@android:color/white">
 
             <ScrollView
                 android:layout_width="match_parent"
@@ -137,6 +170,8 @@
         android:id="@+id/Configs"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:backgroundTint="@android:color/white"
+        android:background="@android:color/white"
         android:visibility="invisible">
 
         <RelativeLayout
@@ -145,7 +180,9 @@
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true">
+            android:layout_alignParentTop="true"
+            android:background="@android:color/white"
+            android:backgroundTint="@android:color/white">
 
             <TextView
                 android:id="@+id/textView2"
@@ -181,25 +218,6 @@
                 android:checked="false"
                 android:text="Semanalmente"
                 android:textSize="18sp" />
-
-            <Button
-                android:id="@+id/MonitorarApp"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_above="@+id/Remove"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:text="Monitorar" />
-
-            <Button
-                android:id="@+id/Remove"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginBottom="79dp"
-                android:text="Remover" />
 
             <TextView
                 android:id="@+id/textView4"
@@ -261,8 +279,8 @@
         android:id="@+id/Barrinha"
         android:scaleType="fitXY"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
         android:layout_alignParentBottom="true"
+        android:layout_height="59dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
