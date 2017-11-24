@@ -187,7 +187,7 @@ public class ViciService extends Service implements Runnable  {
                 String[]a = classes[i].split("°");
                 if (a[2]==null)a[2]= "false";
                 if (a[3]==null)a[3]="false";
-                    tempora.add( new apptocheck(a[0], Integer.parseInt(a[1]),a[2],a[3]));
+                    tempora.add( new apptocheck(a[0], Integer.parseInt(a[1]),a[2],a[3], Integer.parseInt(a[4])));
                 }
             AppsList= tempora;
                    }

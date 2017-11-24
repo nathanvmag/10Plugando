@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
     LinearLayout ll ;
     Handler h ;
     TextView fb,wpp,insta,twitter;
-    Button selectapp,removebt,usototal,voltar,config;
+    Button selectapp,removebt,usototal,config;
     RelativeLayout uso,total,configuration,father;
     RadioButton dia,seman;
     ImageView SplashScreen;
@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                 }
-                AppsList.add(new apptocheck(InitialApps[i],0,"false","false"));
+                AppsList.add(new apptocheck(InitialApps[i],0,"false","false",0));
                 addnewRelative(ll,icon,InitialApps[i],0);
             }
         }
@@ -150,7 +150,8 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
                     if (isPackageExisted(a[0])){
                     if (a[2]==null)a[2]= "false";
                     if (a[3]==null)a[3]="false";
-                    tempora.add( new apptocheck(a[0], Integer.parseInt(a[1]),a[2],a[3]));
+
+                    tempora.add( new apptocheck(a[0], Integer.parseInt(a[1]),a[2],a[3], Integer.parseInt(a[4])));
                 }
                 }
                 AppsList= tempora;
@@ -278,7 +279,8 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
         seman= (RadioButton)findViewById(R.id.Semanal);
         selectapp= (Button)findViewById(R.id.MonitorarApp);
         usototal= (Button)findViewById(R.id.totalbt);
-        voltar= (Button)findViewById(R.id.volt);
+
+
         config= (Button) findViewById(R.id.configsbt);
         uso = (RelativeLayout)findViewById(R.id.UsoLayout);
         total= (RelativeLayout)findViewById(R.id.UsoTotal);
@@ -315,14 +317,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
             }
         });
 
-        voltar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                uso.setVisibility(View.VISIBLE);
-                total.setVisibility(View.INVISIBLE);
-                ( (LinearLayout)findViewById(R.id.doLayout)).removeAllViews();
-            }
-        });
+
         config.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -712,7 +707,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                 }
-                mService.AppsList.add(new apptocheck(PackToADD,0,"false","false"));
+                mService.AppsList.add(new apptocheck(PackToADD,0,"false","false",0));
                 addnewRelative(ll,icon,PackToADD,0);
                 PackToADD= null;
             }else {
