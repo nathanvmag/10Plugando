@@ -25,75 +25,75 @@
     tools:context="nave.com.desplugando.MainActivity"
     android:layout_height="520dp">
 
-    <RelativeLayout
-        android:id="@+id/UsoLayout"
-        android:layout_width="450dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:visibility="visible"
-        android:backgroundTint="@android:color/white"
-        tools:background="@android:color/white">
-
-        <ScrollView
-            android:layout_width="match_parent"
+        <RelativeLayout
+            android:id="@+id/UsoLayout"
+            android:layout_width="450dp"
             android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:visibility="visible">
+            android:backgroundTint="@android:color/white"
+            android:visibility="invisible"
+            tools:background="@android:color/white">
 
-            <LinearLayout
-                android:id="@+id/ll"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:backgroundTint="@android:color/white"
-                android:background="@android:color/white">
-                2
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
-
-                    <Button
-                        android:id="@+id/MonitorarApp"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:text="Monitorar"
-                        android:layout_weight="1"
-                        android:layout_marginTop="21dp"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentEnd="true" />
-
-                    <Button
-                        android:id="@+id/Remove"
-                        android:layout_width="30dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/henrique"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="21dp"
-                        android:layout_height="30dp" />
-
-                </RelativeLayout>
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:visibility="visible">
 
                 <LinearLayout
+                    android:id="@+id/ll"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:backgroundTint="@android:color/white"
+                    android:orientation="vertical">
+                    2
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <Button
+                            android:id="@+id/MonitorarApp"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginTop="21dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/plus" />
+
+                        <Button
+                            android:id="@+id/Remove"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="21dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/henrique" />
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:orientation="horizontal">
+
+                    </LinearLayout>
 
                 </LinearLayout>
+            </ScrollView>
 
-            </LinearLayout>
-        </ScrollView>
-
-    </RelativeLayout>
+        </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/UsoTotal"
@@ -166,83 +166,93 @@
             android:textSize="14sp" />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/Configs"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:backgroundTint="@android:color/white"
-        android:background="@android:color/white"
-        android:visibility="invisible">
-
         <RelativeLayout
-            android:id="@+id/ResetLayout"
+            android:id="@+id/Configs"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
             android:background="@android:color/white"
-            android:backgroundTint="@android:color/white">
+            android:backgroundTint="@android:color/white"
+            android:visibility="visible">
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <RelativeLayout
+                android:id="@+id/ResetLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="51dp"
-                android:text="Resetar as estatística :"
-                android:textSize="16sp" />
+                android:background="@android:color/white"
+                android:backgroundTint="@android:color/white">
 
-            <RadioButton
-                android:id="@+id/Diariamente"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/textView2"
-                android:layout_marginLeft="19dp"
-                android:layout_marginStart="19dp"
-                android:text="Diariamente"
-                android:textSize="18sp" />
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="51dp"
+                    android:text="Resetar as estatística :"
+                    android:textSize="16sp" />
 
-            <RadioButton
-                android:id="@+id/Semanal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/textView2"
-                android:layout_marginEnd="21dp"
-                android:layout_marginRight="21dp"
-                android:checked="false"
-                android:text="Semanalmente"
-                android:textSize="18sp" />
+                <RadioButton
+                    android:id="@+id/Diariamente"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/textView2"
+                    android:layout_marginLeft="19dp"
+                    android:layout_marginStart="19dp"
+                    android:text="Diariamente"
+                    android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginBottom="226dp"
-                android:text="Desenvolvido por Caian Sá, Evelyn Corrêa, Henrique Filho, Hernan Matiello, João Pedro Santos, Lucas Bauer e Nathan Vieira"
-                android:textAlignment="center"
-                android:textSize="16sp" />
+                <RadioButton
+                    android:id="@+id/Semanal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/textView2"
+                    android:layout_marginEnd="21dp"
+                    android:layout_marginRight="21dp"
+                    android:checked="false"
+                    android:text="Semanalmente"
+                    android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/textView4"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="70dp"
-                android:text="Apoio Daniel Martins" />
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginBottom="226dp"
+                    android:text="Desenvolvido por Caian Sá, Evelyn Corrêa, Henrique Filho, Hernan Matiello, João Pedro Santos, Lucas Bauer e Nathan Vieira"
+                    android:textAlignment="center"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="160dp"
+                    android:layout_height="200dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="20dp"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/respostas" />
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/textView4"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="70dp"
+                    android:text="Apoio Daniel Martins" />
+
+            </RelativeLayout>
 
         </RelativeLayout>
-
-    </RelativeLayout>
 
     </RelativeLayout>
 

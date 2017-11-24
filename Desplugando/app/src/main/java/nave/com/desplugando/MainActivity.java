@@ -417,7 +417,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
                                            if (((TextView)rl.getChildAt(w)).getText().equals(apptoremove.packagename))
                                            {
                                                ll.removeView(rl);
-                                               doRestart(getApplicationContext());
+                                              // doRestart(getApplicationContext());
                                            }
                                         }
                                     }
