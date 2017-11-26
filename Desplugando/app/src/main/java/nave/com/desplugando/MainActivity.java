@@ -596,7 +596,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
         }
         else if (totaltime/3600<=toDoImages.size())howmuch= totaltime/3600;
         else howmuch= toDoImages.size();
-        findViewById(R.id.textView5).setVisibility(View.VISIBLE);
+      //  findViewById(R.id.textView5).setVisibility(View.VISIBLE);
 
         for(int i=0;i<howmuch;i++){
             RelativeLayout temp = (RelativeLayout)LayoutInflater.from(this).inflate(R.layout.whatdo,null);
@@ -607,7 +607,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
     }
         if (howmuch==0)
         {
-            findViewById(R.id.textView5).setVisibility(View.INVISIBLE);
+         //   findViewById(R.id.textView5).setVisibility(View.INVISIBLE);
             RelativeLayout temp = (RelativeLayout)LayoutInflater.from(this).inflate(R.layout.whatdo,null);
             ((ImageView) temp.findViewById(R.id.doImage)).setImageBitmap(BitmapFactory.decodeResource(getResources(),
                    R.drawable.trofeu));
@@ -696,6 +696,8 @@ public class MainActivity extends AppCompatActivity implements Runnable,ServiceC
         {
             father.setPadding(16,16,16,16);
             getSupportActionBar().show();
+            barrinha.setMinimumHeight(70* getResources().getDisplayMetrics().heightPixels / 1280);
+            barrinha.setMaxHeight( 70* getResources().getDisplayMetrics().heightPixels / 1280);
             SplashScreen.setVisibility(View.INVISIBLE);
         }
         if (mBound&&PackToADD!=null)
