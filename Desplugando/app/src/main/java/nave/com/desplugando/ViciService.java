@@ -207,7 +207,7 @@ public class ViciService extends Service implements Runnable  {
             NotifyHour = 14;
                 editor.putInt("hora",NotifyHour);
         }
-            Notify(R.drawable.r,"Veja o uso nas redes","Veja quanto tempo já foi gasto nas redes",0,MainActivity.class);
+            Notify(R.drawable.icon,"Veja o uso nas redes","Veja quanto tempo já foi gasto nas redes",0,MainActivity.class);
         }
         if (!daycontrol)
         {
@@ -215,7 +215,7 @@ public class ViciService extends Service implements Runnable  {
             if (calendar.get(Calendar.DAY_OF_MONTH)!=day&&calendar.get(Calendar.HOUR_OF_DAY)==resetHour&&calendar.get(Calendar.WEEK_OF_MONTH)!=week) {
                 day = calendar.get(Calendar.DAY_OF_MONTH);
                 week = calendar.get(Calendar.WEEK_OF_MONTH);
-                Notify(R.drawable.r,"As estatisticas da semana serão resetadas ","Veja quanto tempo já foi gasto nas redes sociais",0,MainActivity.class);
+                Notify(R.drawable.icon,"As estatisticas da semana serão resetadas ","Veja quanto tempo já foi gasto nas redes sociais",0,MainActivity.class);
                 startcount();
         }
 
@@ -226,7 +226,7 @@ public class ViciService extends Service implements Runnable  {
             day = calendar.get(Calendar.DAY_OF_MONTH);
 
             if (daycontrol){
-            Notify(R.drawable.r,"As estatisticas serão resetadas","Veja quanto tempo já foi gasto nas redes sociais",0,MainActivity.class);
+            Notify(R.drawable.icon,"As estatisticas serão resetadas","Veja quanto tempo já foi gasto nas redes sociais",0,MainActivity.class);
                 startcount();
                 for (apptocheck aps:AppsList
                         ) {aps.twohournot= false;
@@ -272,7 +272,7 @@ public class ViciService extends Service implements Runnable  {
                             ai = null;
                         }
                         final String applicationName = (String) (ai != null ? pm.getApplicationLabel(ai) : "(unknown)");
-                        Notify(R.drawable.r, "Voce está usando o " + applicationName + " demais", "Você ja passou 2 horas usando", 1, MainActivity.class);
+                        Notify(R.drawable.icon, "Voce está usando o " + applicationName + " demais", "Você ja passou 2 horas usando", 1, MainActivity.class);
                         aps.twohournot = true;
                     }
                     if (aps.dayuse>14400&&!aps.fourournot)
@@ -285,7 +285,7 @@ public class ViciService extends Service implements Runnable  {
                             ai = null;
                         }
                         final String applicationName = (String) (ai != null ? pm.getApplicationLabel(ai) : "(unknown)");
-                        Notify(R.drawable.r, "Voce está usando o " + applicationName + " demais", "Você ja passou 4 horas usando", 1, MainActivity.class);
+                        Notify(R.drawable.icon, "Voce está usando o " + applicationName + " demais", "Você ja passou 4 horas usando", 1, MainActivity.class);
                         aps.fourournot = true;
                     }
                 }
@@ -325,7 +325,7 @@ public class ViciService extends Service implements Runnable  {
                     aps.fourournot= false;
                     aps.useTime=0;
                 }
-                Notify(R.drawable.r,"As estatisticas Foram resetadas","Veja quanto tempo já foi gasto nas redes sociais",0,MainActivity.class);
+                Notify(R.drawable.icon,"As estatisticas Foram resetadas","Veja quanto tempo já foi gasto nas redes sociais",0,MainActivity.class);
             }
             else gambtimer++;
             debug(""+gambtimer);

@@ -27,7 +27,7 @@
             android:id="@+id/UsoLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
+
             android:layout_alignParentTop="true"
             android:backgroundTint="@android:color/white"
             android:visibility="invisible"
@@ -106,7 +106,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/Barrinha"
+
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginBottom="45dp"
